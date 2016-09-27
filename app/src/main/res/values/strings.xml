@@ -4,4 +4,6 @@
     <string name="welcome_second">MustList와 내기를 하세요</string>
     <string name="welcome_third">만들고 싶은 의지만큼 결제하고, 성공하여 돌려받으세요</string>
     <string name="welcome_start">시작하기</string>
+    <string name="double_back_exit">Please click BACK again to exit</string>
+    <string name="main_list_add_text">목표를 등록하세요</string>
 </resources>

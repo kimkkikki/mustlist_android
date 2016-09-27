@@ -32,13 +32,9 @@
             android:id="@+id/main_listview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
-        
-        <View
-            android:id="@+id/main_menu"
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:background="@android:color/black"/>
+
+        <include
+            layout="@layout/main_menu"/>
 
     </android.support.v4.widget.DrawerLayout>
 

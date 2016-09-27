@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MustList</string>
+    <string name="app_name">의지생성기</string>
     <string name="welcome_first">어떤일을 할때 의지가 안생기나요?</string>
     <string name="welcome_second">MustList와 내기를 하세요</string>
     <string name="welcome_third">만들고 싶은 의지만큼 결제하고, 성공하여 돌려받으세요</string>
     <string name="welcome_start">시작하기</string>
+    <string name="double_back_exit">종료하려면 백버튼을 한번 더 누르세요</string>
+    <string name="main_list_add_text">목표를 등록하세요</string>
 </resources>
