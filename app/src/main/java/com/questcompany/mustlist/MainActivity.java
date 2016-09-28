@@ -1,6 +1,7 @@
 package com.questcompany.mustlist;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +21,11 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Toast;
 
+import com.questcompany.mustlist.entity.Must;
+import com.questcompany.mustlist.util.NetworkManager;
+
+import java.util.List;
+
 /**
  * Created by kimkkikki on 2016. 9. 26..
  * MainActivity
@@ -31,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
 
     private boolean doubleBackToExitPressOne = false;
+
+    private List<Must> mustList;
 
     @Override
     public void onBackPressed() {
@@ -78,6 +86,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "onCreate: getSupportActionBar is null");
         }
 
+        mustList = NetworkManager.getMustList();
+
         // List View
         ListViewCompat listViewCompat = (ListViewCompat) findViewById(R.id.main_listview);
         ListViewAdapter listViewAdapter = new ListViewAdapter();
@@ -86,7 +96,11 @@ public class MainActivity extends AppCompatActivity {
         listViewCompat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d(TAG, "onItemClick: ListView " + i);
+                if (mustList.size() != i) {
+                    Log.d(TAG, "onItemClick: ListView " + i);
+                } else {
+                    startActivity(new Intent(MainActivity.this, AddActivity.class));
+                }
             }
         });
     }
@@ -119,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 4;
+            return mustList.size() + 1;
         }
 
         @Override
@@ -135,20 +149,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
 
-            Context context = viewGroup.getContext();
-            LayoutInflater inflaterCompat = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            view = inflaterCompat.inflate(R.layout.main_list_view_empty, viewGroup, false);
-
-//            if (i == 3) {
-//                if (view == null) {
-//                }
-//            } else {
-//                if (view == null) {
-//                    LayoutInflater inflaterCompat = (LayoutInflater) context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
-//                    view = inflaterCompat.inflate(R.layout.listview_item_2, viewGroup, false);
-//                }
-//            }
-
+            if (mustList.size() + 1 >= i) {
+                Context context = viewGroup.getContext();
+                LayoutInflater inflaterCompat = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflaterCompat.inflate(R.layout.main_list_view_empty, viewGroup, false);
+            } else {
+                //TODO: 데이터 있을때 처리 필요 아래는 임시로 추가 오브젝트
+                Context context = viewGroup.getContext();
+                LayoutInflater inflaterCompat = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                view = inflaterCompat.inflate(R.layout.main_list_view_empty, viewGroup, false);
+            }
 
             return view;
         }

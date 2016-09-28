@@ -14,7 +14,7 @@ import android.widget.Button;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    private final String TAG = "WelcomeActivity";
+    private static final String TAG = "WelcomeActivity";
     private int[] layouts;
 
     @Override
