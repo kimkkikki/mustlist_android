@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="start_day">
+        <item>오늘</item>
+        <item>내일</item>
+    </array>
+    <array name="period">
+        <item>일주일</item>
+        <item>한달</item>
+    </array>
+    <array name="amount">
+        <item>1,000원</item>
+        <item>5,000원</item>
+        <item>10,000원</item>
+        <item>30,000원</item>
+        <item>50,000원</item>
+        <item>100,000원</item>
+    </array>
+</resources>

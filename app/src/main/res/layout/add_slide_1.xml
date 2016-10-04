@@ -1,36 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/add_me_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_me"
+        android:layout_alignBaseline="@+id/add_must_title"
+        android:layout_alignBottom="@id/add_must_title"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@id/add_must_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@id/add_me_text_view"
+        android:layout_toEndOf="@id/add_me_text_view"
+        android:layout_toLeftOf="@+id/add_and_text_view"
+        android:layout_toStartOf="@id/add_and_text_view"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:hint="@string/add_title_hint"
+        android:maxLines="1"
+        android:imeOptions="actionNext" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@id/add_and_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_and"
+        android:layout_alignBaseline="@id/add_must_title"
+        android:layout_alignBottom="@id/add_must_title"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/add_start_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/add_must_title"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:entries="@array/start_day" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/add_day_between_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_day_between"
+        android:layout_alignBottom="@id/add_start_spinner"
+        android:layout_toRightOf="@id/add_start_spinner"
+        android:layout_toEndOf="@id/add_start_spinner"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"/>
+
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/add_period_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/add_day_between_text_view"
+        android:layout_toRightOf="@+id/add_day_between_text_view"
+        android:layout_toEndOf="@+id/add_day_between_text_view"
+        android:entries="@array/period"/>
 
     <android.support.v7.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:text="할일의 제목을 적어주세요"
-        android:id="@+id/view" />
-
-    <android.support.v7.widget.AppCompatEditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:text="@string/add_period"
+        android:layout_alignBottom="@id/add_period_spinner"
+        android:layout_toRightOf="@id/add_period_spinner"
+        android:layout_toEndOf="@id/add_period_spinner"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:id="@+id/add_title_edit_text"
-        android:layout_below="@+id/view"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:imeOptions="actionNext"/>
+        android:layout_marginEnd="10dp"/>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/add_title_next_button"
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/add_amount_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:entries="@array/amount"
+        android:layout_below="@+id/add_start_spinner"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:text="Next"
-        android:layout_below="@+id/add_title_edit_text"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"/>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_end_text"
+        android:layout_alignBaseline="@+id/add_amount_spinner"
+        android:layout_alignBottom="@+id/add_amount_spinner"
+        android:layout_toRightOf="@+id/add_amount_spinner"
+        android:layout_toEndOf="@+id/add_amount_spinner" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/add_next_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_ok"
+        android:layout_below="@+id/add_amount_spinner"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"/>
+
 </RelativeLayout>

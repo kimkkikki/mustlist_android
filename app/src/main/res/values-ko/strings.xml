@@ -7,4 +7,23 @@
     <string name="welcome_start">시작하기</string>
     <string name="double_back_exit">종료하려면 백버튼을 한번 더 누르세요</string>
     <string name="main_list_add_text">목표를 등록하세요</string>
+    <string name="add_me">나는</string>
+    <string name="add_title_hint">무엇</string>
+    <string name="add_and">을</string>
+    <string name="add_unknown_day">몇일</string>
+    <string name="add_day_between">부터</string>
+    <string name="add_day_end">까지</string>
+    <string name="add_period">동안</string>
+    <string name="add_end_text">을 걸고 할 것 입니다</string>
+    <string name="add_ok">의지 점수 계산하기</string>
+    <string name="add_title">의지 생성하기</string>
+    <string name="preview_name">의지명</string>
+    <string name="preview_start_day">시작일</string>
+    <string name="preview_ok_button">의지 생성하기</string>
+    <string name="preview_period">기간</string>
+    <string name="preview_amount">금액</string>
+    <string name="preview_default_point">기본 적립 포인트</string>
+    <string name="preview_will_point">성공 보상 포인트</string>
+    <string name="preview_guide_1">목표달성시 결제금액은 자동으로 전액 환불됩니다</string>
+    <string name="preview_guide_2">목표달성 기준은 설정하신 기간동안 매일 접속하여 수행여부를 체크하세요</string>
 </resources>
