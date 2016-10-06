@@ -21,8 +21,9 @@
     <string name="preview_ok_button">의지 생성하기</string>
     <string name="preview_period">기간</string>
     <string name="preview_amount">금액</string>
-    <string name="preview_default_point">기본 적립 포인트</string>
-    <string name="preview_will_point">성공 보상 포인트</string>
-    <string name="preview_guide_1">목표달성시 결제금액은 자동으로 전액 환불됩니다</string>
-    <string name="preview_guide_2">목표달성 기준은 설정하신 기간동안 매일 접속하여 수행여부를 체크하세요</string>
+    <string name="preview_default_point">기본 의지점수</string>
+    <string name="preview_success_point">성공 추가점수</string>
+    <string name="preview_guide_1">※ 목표달성시 결제된 금액은 자동으로 전액 환불됩니다</string>
+    <string name="preview_guide_2">※ 목표달성을 위해 설정하신 기간동안 매일 접속하여 수행여부를 체크하세요</string>
+    <string name="preview_time_range">수행 체크 시간대</string>
 </resources>

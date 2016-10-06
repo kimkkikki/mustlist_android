@@ -7,7 +7,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,6 +20,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.questcompany.mustlist.entity.PreviewResult;
+import com.questcompany.mustlist.util.NetworkManager;
+
 
 /**
  * Created by kimkkikki on 2016. 9. 28..
@@ -31,7 +33,6 @@ public class AddActivity extends AppCompatActivity {
 
     private static final String TAG = "AddActivity";
 
-    private Toolbar toolbar;
     private int[] layouts;
     private InputMethodManager inputMethodManager;
     private ViewPager viewPager;
@@ -41,6 +42,7 @@ public class AddActivity extends AppCompatActivity {
     private String[] startDayArray;
     private String[] periodArray;
     private String[] amountArray;
+    private String[] timeRangeArray;
 
     @Override
     public void onBackPressed() {
@@ -83,7 +85,7 @@ public class AddActivity extends AppCompatActivity {
         startDayArray = getResources().getStringArray(R.array.start_day);
         periodArray = getResources().getStringArray(R.array.period);
         amountArray = getResources().getStringArray(R.array.amount);
-
+        timeRangeArray = getResources().getStringArray(R.array.time_range);
     }
 
     private class AddViewPagerAdapter extends PagerAdapter {
@@ -92,11 +94,14 @@ public class AddActivity extends AppCompatActivity {
         private Spinner startDaySpinner;
         private Spinner periodSpinner;
         private Spinner amountSpinner;
+        private Spinner timeRangeSpinner;
         private Button nextButton;
+        private Button okButton;
 
         private int startDaySelected = 0;
         private int periodSelected = 0;
         private int amountSelected = 0;
+        private int timeRangeSelected = 0;
 
         AddViewPagerAdapter() {
         }
@@ -124,6 +129,10 @@ public class AddActivity extends AppCompatActivity {
         }
 
         private void goNext() {
+            // 서버에 프리뷰 전달
+            PreviewResult previewResult = NetworkManager.previewAddMust(startDayArray[startDaySelected],
+                    periodArray[periodSelected], amountArray[amountSelected], timeRangeArray[timeRangeSelected]);
+
             pageOffset += 1;
             viewPager.setCurrentItem(pageOffset, true);
 
@@ -131,11 +140,35 @@ public class AddActivity extends AppCompatActivity {
             TextView startDayTextView = (TextView) findViewById(R.id.preview_start_day);
             TextView periodTextView = (TextView) findViewById(R.id.preview_period);
             TextView amountTextView = (TextView) findViewById(R.id.preview_amount);
+            TextView timeRangeTextView = (TextView) findViewById(R.id.preview_time_range);
+            TextView defaultPointTextView = (TextView) findViewById(R.id.preview_default_point);
+            TextView successPointTextView = (TextView) findViewById(R.id.preview_success_point);
 
             nameTextView.setText(addTitleEditText.getText().toString());
-            startDayTextView.setText(startDayArray[startDaySelected]);
-            periodTextView.setText(periodArray[periodSelected]);
-            amountTextView.setText(amountArray[amountSelected]);
+            startDayTextView.setText(previewResult.getStartDay());
+            periodTextView.setText(previewResult.getPeriod());
+            amountTextView.setText(previewResult.getAmount());
+            timeRangeTextView.setText(previewResult.getTimeRange());
+
+            //TODO: 점수 계산 수정 필요함 -> 서버에서 계산하도록 해야할 듯
+            defaultPointTextView.setText("" + previewResult.getDefaultPoint());
+            successPointTextView.setText("" + previewResult.getSuccessPoint());
+        }
+
+        private void addMust() {
+            // TODO: InApp결제 구현 필요
+            // TODO: 서버 호출 추가 구현 필요
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(AddActivity.this);
+            alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                    finish();
+                }
+            });
+            alert.setMessage("등록되었습니다");
+            alert.show();
         }
 
         @Override
@@ -209,6 +242,21 @@ public class AddActivity extends AppCompatActivity {
                 }
             }
 
+            if (timeRangeSpinner == null) {
+                timeRangeSpinner = (Spinner) findViewById(R.id.add_time_range_spinner);
+                if (timeRangeSpinner != null) {
+                    timeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                        @Override
+                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                            timeRangeSelected = i;
+                        }
+                        @Override
+                        public void onNothingSelected(AdapterView<?> adapterView) {
+                        }
+                    });
+                }
+            }
+
             if (nextButton == null) {
                 nextButton = (Button) findViewById(R.id.add_next_button);
                 nextButton.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +267,18 @@ public class AddActivity extends AppCompatActivity {
                         }
                     }
                 });
+            }
+
+            if (okButton == null) {
+                okButton = (Button) findViewById(R.id.preview_ok_button);
+                if (okButton != null) {
+                    okButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            addMust();
+                        }
+                    });
+                }
             }
 
             return view;

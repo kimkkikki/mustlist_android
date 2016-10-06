@@ -16,4 +16,19 @@
         <item>50,000원</item>
         <item>100,000원</item>
     </array>
+    <array name="time_range">
+        <item>선택안함</item>
+        <item>00~02시</item>
+        <item>02~04시</item>
+        <item>04~06시</item>
+        <item>06~08시</item>
+        <item>08~10시</item>
+        <item>10~12시</item>
+        <item>12~14시</item>
+        <item>14~16시</item>
+        <item>16~18시</item>
+        <item>18~20시</item>
+        <item>20~22시</item>
+        <item>22~24시</item>
+    </array>
 </resources>

@@ -87,6 +87,23 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:gravity="end"
+                android:text="@string/preview_time_range"/>
+            <TextView
+                android:id="@+id/preview_time_range"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:gravity="center"/>
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:gravity="end"
                 android:text="@string/preview_default_point"/>
             <TextView
                 android:id="@+id/preview_default_point"
@@ -104,9 +121,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:gravity="end"
-                android:text="@string/preview_will_point"/>
+                android:text="@string/preview_success_point"/>
             <TextView
-                android:id="@+id/preview_will_point"
+                android:id="@+id/preview_success_point"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
@@ -138,9 +155,11 @@
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/preview_ok_button"
+        android:text="@string/preview_ok_button"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="@string/preview_ok_button"/>
+        android:layout_margin="10dp"/>
 
 </LinearLayout>
