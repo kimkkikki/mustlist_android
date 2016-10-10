@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.questcompany.mustlist.entity.Must;
@@ -31,8 +35,9 @@ import java.util.List;
  * MainActivity
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private static final String TAG = "MainActivity";
 
@@ -71,7 +76,13 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "onCreate: toolbar is null");
         }
 
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
+        // Side Menu Selected Listener
+        NavigationView navigationView = (NavigationView) findViewById(R.id.main_navigation_view);
+        if (navigationView != null) {
+            navigationView.setNavigationItemSelectedListener(this);
+        }
+
+        drawerLayout = (DrawerLayout) findViewById(R.id.main_drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.app_name, R.string.app_name);
         if (drawerLayout != null) {
             drawerLayout.addDrawerListener(actionBarDrawerToggle);
@@ -86,7 +97,8 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "onCreate: getSupportActionBar is null");
         }
 
-        mustList = NetworkManager.getMustList();
+        mustList = NetworkManager.getMustList("", MainActivity.this);
+        Log.d(TAG, "onCreate: MistList : " + mustList.toString());
 
         // List View
         ListViewCompat listViewCompat = (ListViewCompat) findViewById(R.id.main_listview);
@@ -129,6 +141,21 @@ public class MainActivity extends AppCompatActivity {
         return actionBarDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+
+        Log.d(TAG, "onNavigationItemSelected: " + id);
+
+        switch (id) {
+            case R.id.side_notice:
+                startActivity(new Intent(MainActivity.this, NoticeActivity.class));
+                break;
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
+    }
+
     public class ListViewAdapter extends BaseAdapter {
 
         @Override
@@ -148,8 +175,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
+            Log.d(TAG, "getView: index  " + i);
 
-            if (mustList.size() + 1 >= i) {
+            if (mustList.size() == i) {
                 Context context = viewGroup.getContext();
                 LayoutInflater inflaterCompat = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflaterCompat.inflate(R.layout.main_list_view_empty, viewGroup, false);
@@ -157,7 +185,21 @@ public class MainActivity extends AppCompatActivity {
                 //TODO: 데이터 있을때 처리 필요 아래는 임시로 추가 오브젝트
                 Context context = viewGroup.getContext();
                 LayoutInflater inflaterCompat = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflaterCompat.inflate(R.layout.main_list_view_empty, viewGroup, false);
+                view = inflaterCompat.inflate(R.layout.main_list_view, viewGroup, false);
+
+                TextView nameTextView = (TextView) view.findViewById(R.id.main_list_name);
+                TextView timeRangeTextView = (TextView) view.findViewById(R.id.main_list_time_range);
+                TextView remainCountTextView = (TextView) view.findViewById(R.id.main_list_remain_count);
+                TextView amountTextView = (TextView) view.findViewById(R.id.main_list_amount);
+                TextView periodTextView = (TextView) view.findViewById(R.id.main_list_period);
+
+                Must must = mustList.get(i);
+                nameTextView.setText(must.getName());
+                timeRangeTextView.setText(must.getTimeRange());
+                amountTextView.setText(must.getAmount());
+                periodTextView.setText(must.getPeriod());
+
+//                view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             }
 
             return view;

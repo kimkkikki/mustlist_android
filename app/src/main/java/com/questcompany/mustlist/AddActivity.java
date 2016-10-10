@@ -20,7 +20,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.questcompany.mustlist.entity.PreviewResult;
+import com.questcompany.mustlist.entity.Must;
 import com.questcompany.mustlist.util.NetworkManager;
 
 
@@ -130,7 +130,7 @@ public class AddActivity extends AppCompatActivity {
 
         private void goNext() {
             // 서버에 프리뷰 전달
-            PreviewResult previewResult = NetworkManager.previewAddMust(startDayArray[startDaySelected],
+            Must must = NetworkManager.previewAddMust(startDayArray[startDaySelected],
                     periodArray[periodSelected], amountArray[amountSelected], timeRangeArray[timeRangeSelected]);
 
             pageOffset += 1;
@@ -145,19 +145,21 @@ public class AddActivity extends AppCompatActivity {
             TextView successPointTextView = (TextView) findViewById(R.id.preview_success_point);
 
             nameTextView.setText(addTitleEditText.getText().toString());
-            startDayTextView.setText(previewResult.getStartDay());
-            periodTextView.setText(previewResult.getPeriod());
-            amountTextView.setText(previewResult.getAmount());
-            timeRangeTextView.setText(previewResult.getTimeRange());
+            startDayTextView.setText(must.getStartDay());
+            periodTextView.setText(must.getPeriod());
+            amountTextView.setText(must.getAmount());
+            timeRangeTextView.setText(must.getTimeRange());
 
             //TODO: 점수 계산 수정 필요함 -> 서버에서 계산하도록 해야할 듯
-            defaultPointTextView.setText("" + previewResult.getDefaultPoint());
-            successPointTextView.setText("" + previewResult.getSuccessPoint());
+            defaultPointTextView.setText("" + must.getDefaultPoint());
+            successPointTextView.setText("" + must.getSuccessPoint());
         }
 
         private void addMust() {
             // TODO: InApp결제 구현 필요
             // TODO: 서버 호출 추가 구현 필요
+            NetworkManager.addMust(AddActivity.this, addTitleEditText.getText().toString(), startDayArray[startDaySelected],
+                    periodArray[periodSelected], amountArray[amountSelected], timeRangeArray[timeRangeSelected]);
 
             AlertDialog.Builder alert = new AlertDialog.Builder(AddActivity.this);
             alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {

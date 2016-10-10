@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/side_point_change"
+            android:title="포인트 교환소" />
+        <item
+            android:id="@+id/side_history"
+            android:title="@string/history" />
+        <item
+            android:id="@+id/side_notice"
+            android:title="@string/notice" />
+        <item
+            android:id="@+id/side_faq"
+            android:title="@string/faq" />
+    </group>
+</menu>

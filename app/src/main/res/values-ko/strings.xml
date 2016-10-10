@@ -27,4 +27,14 @@
     <string name="preview_guide_1">※ 목표달성시 결제된 금액은 자동으로 전액 환불됩니다</string>
     <string name="preview_guide_2">※ 목표달성을 위해 설정하신 기간동안 매일 접속하여 수행여부를 체크하세요</string>
     <string name="preview_time_range">수행 체크 시간대</string>
+    <string name="notice">공지사항</string>
+    <string name="faq">FAQ</string>
+    <string name="main_remain_text">남은 횟수</string>
+    <string name="today">오늘</string>
+    <string name="tomorrow">내일</string>
+    <string name="one_week">1주일</string>
+    <string name="two_weeks">2주일</string>
+    <string name="three_weeks">3주일</string>
+    <string name="one_month">한달</string>
+    <string name="history">히스토리</string>
 </resources>

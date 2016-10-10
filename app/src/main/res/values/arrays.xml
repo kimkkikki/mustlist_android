@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="start_day">
-        <item>오늘</item>
-        <item>내일</item>
+        <item>@string/today</item>
+        <item>@string/tomorrow</item>
     </array>
     <array name="period">
-        <item>일주일</item>
-        <item>한달</item>
+        <item>@string/one_week</item>
+        <item>@string/two_weeks</item>
+        <item>@string/three_weeks</item>
+        <item>@string/one_month</item>
     </array>
     <array name="amount">
         <item>1,000원</item>
