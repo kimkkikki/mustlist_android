@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.questcompany.mustlist.entity.Must;
+import com.questcompany.mustlist.util.DateUtil;
 import com.questcompany.mustlist.util.NetworkManager;
 
 
@@ -43,6 +44,8 @@ public class AddActivity extends AppCompatActivity {
     private String[] periodArray;
     private String[] amountArray;
     private String[] timeRangeArray;
+
+    private Must must;
 
     @Override
     public void onBackPressed() {
@@ -128,10 +131,19 @@ public class AddActivity extends AppCompatActivity {
             return false;
         }
 
-        private void goNext() {
+        private void goPreview() {
             // 서버에 프리뷰 전달
-            Must must = NetworkManager.previewAddMust(startDayArray[startDaySelected],
-                    periodArray[periodSelected], amountArray[amountSelected], timeRangeArray[timeRangeSelected]);
+            if (must == null) {
+                must = new Must();
+            }
+
+            must.setName(addTitleEditText.getText().toString());
+            must.setStartDate(DateUtil.getDateStringWithDay(startDaySelected));
+            must.setEndDate(DateUtil.getDateStringWithWeek(periodSelected));
+            must.setCheckTimeRange(timeRangeArray[timeRangeSelected]);
+            must.setAmount(amountSelected);
+
+            must = NetworkManager.previewAddMust(must);
 
             pageOffset += 1;
             viewPager.setCurrentItem(pageOffset, true);
@@ -145,10 +157,10 @@ public class AddActivity extends AppCompatActivity {
             TextView successPointTextView = (TextView) findViewById(R.id.preview_success_point);
 
             nameTextView.setText(addTitleEditText.getText().toString());
-            startDayTextView.setText(must.getStartDay());
-            periodTextView.setText(must.getPeriod());
-            amountTextView.setText(must.getAmount());
-            timeRangeTextView.setText(must.getTimeRange());
+            startDayTextView.setText(startDayArray[startDaySelected]);
+            periodTextView.setText(periodArray[periodSelected] + "(" + must.getStartDate() + "~" + must.getEndDate() + ")");
+            amountTextView.setText(amountArray[amountSelected]);
+            timeRangeTextView.setText(timeRangeArray[timeRangeSelected]);
 
             //TODO: 점수 계산 수정 필요함 -> 서버에서 계산하도록 해야할 듯
             defaultPointTextView.setText("" + must.getDefaultPoint());
@@ -158,8 +170,7 @@ public class AddActivity extends AppCompatActivity {
         private void addMust() {
             // TODO: InApp결제 구현 필요
             // TODO: 서버 호출 추가 구현 필요
-            NetworkManager.addMust(AddActivity.this, addTitleEditText.getText().toString(), startDayArray[startDaySelected],
-                    periodArray[periodSelected], amountArray[amountSelected], timeRangeArray[timeRangeSelected]);
+            NetworkManager.addMust(must);
 
             AlertDialog.Builder alert = new AlertDialog.Builder(AddActivity.this);
             alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -187,7 +198,7 @@ public class AddActivity extends AppCompatActivity {
                     @Override
                     public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                         if (checkTitle()) {
-                            goNext();
+                            goPreview();
                         }
                         return true;
                     }
@@ -265,7 +276,7 @@ public class AddActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
                         if (checkTitle()) {
-                            goNext();
+                            goPreview();
                         }
                     }
                 });

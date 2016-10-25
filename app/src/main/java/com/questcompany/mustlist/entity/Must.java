@@ -6,22 +6,21 @@ package com.questcompany.mustlist.entity;
  */
 public class Must {
     private String name;
-    private String startDay;
-    private String period;
-    private String amount;
-    private String timeRange;
+    private Integer amount;
+    private String checkTimeRange;
     private Integer defaultPoint;
     private Integer successPoint;
+
+    private String startDate;
+    private String endDate;
 
     public Must() {
     }
 
-    public Must(String name, String startDay, String period, String amount, String timeRange) {
+    public Must(String name, String startDay, String period, Integer amount, String checkTimeRange) {
         this.name = name;
-        this.startDay = startDay;
-        this.period = period;
         this.amount = amount;
-        this.timeRange = timeRange;
+        this.checkTimeRange = checkTimeRange;
     }
 
     public String getName() {
@@ -32,36 +31,20 @@ public class Must {
         this.name = name;
     }
 
-    public String getStartDay() {
-        return startDay;
-    }
-
-    public String getPeriod() {
-        return period;
-    }
-
-    public String getAmount() {
+    public Integer getAmount() {
         return amount;
     }
 
-    public String getTimeRange() {
-        return timeRange;
+    public String getCheckTimeRange() {
+        return checkTimeRange;
     }
 
-    public void setStartDay(String startDay) {
-        this.startDay = startDay;
-    }
-
-    public void setPeriod(String period) {
-        this.period = period;
-    }
-
-    public void setAmount(String amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
-    public void setTimeRange(String timeRange) {
-        this.timeRange = timeRange;
+    public void setCheckTimeRange(String checkTimeRange) {
+        this.checkTimeRange = checkTimeRange;
     }
 
     public void setDefaultPoint(Integer defaultPoint) {
@@ -80,14 +63,28 @@ public class Must {
         return successPoint;
     }
 
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
     @Override
     public String toString() {
         return "Must{" +
                 "name='" + name + '\'' +
-                ", startDay='" + startDay + '\'' +
-                ", period='" + period + '\'' +
                 ", amount='" + amount + '\'' +
-                ", timeRange='" + timeRange + '\'' +
+                ", checkTimeRange='" + checkTimeRange + '\'' +
                 ", defaultPoint=" + defaultPoint +
                 ", successPoint=" + successPoint +
                 '}';

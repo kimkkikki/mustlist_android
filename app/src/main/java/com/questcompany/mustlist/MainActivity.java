@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,7 +28,9 @@ import android.widget.Toast;
 
 import com.questcompany.mustlist.entity.Must;
 import com.questcompany.mustlist.util.NetworkManager;
+import com.questcompany.mustlist.util.PrefUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,15 +38,18 @@ import java.util.List;
  * MainActivity
  */
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener {
 
     private DrawerLayout drawerLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
     private static final String TAG = "MainActivity";
 
     private boolean doubleBackToExitPressOne = false;
 
     private List<Must> mustList;
+
+    private ListViewAdapter listViewAdapter;
 
     @Override
     public void onBackPressed() {
@@ -63,9 +69,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    protected void onResume() {
+        mustList = NetworkManager.getMustList();
+        listViewAdapter.notifyDataSetChanged();
+        Log.d(TAG, "onResume: MistList : " + mustList.toString());
+        super.onResume();
+    }
+
+    @Override
+    public void onRefresh() {
+        this.onResume();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         // Tool Bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -97,12 +120,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Log.e(TAG, "onCreate: getSupportActionBar is null");
         }
 
-        mustList = NetworkManager.getMustList("", MainActivity.this);
-        Log.d(TAG, "onCreate: MistList : " + mustList.toString());
+        mustList = new ArrayList<>();
 
         // List View
         ListViewCompat listViewCompat = (ListViewCompat) findViewById(R.id.main_listview);
-        ListViewAdapter listViewAdapter = new ListViewAdapter();
+        listViewAdapter = new ListViewAdapter();
         listViewCompat.setAdapter(listViewAdapter);
 
         listViewCompat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -115,6 +137,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         });
+
+        // Side Headers
+        TextView sideIdTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.side_id_text_view);
+        TextView sidePointTextView = (TextView) navigationView.getHeaderView(0).findViewById(R.id.side_point_text_view);
+        if (sideIdTextView == null) {
+            Log.d(TAG, "onCreate: side textView is null");
+        } else {
+            sideIdTextView.setText(PrefUtil.getId(this));
+        }
     }
 
     // Tool Bar
@@ -195,9 +226,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 Must must = mustList.get(i);
                 nameTextView.setText(must.getName());
-                timeRangeTextView.setText(must.getTimeRange());
-                amountTextView.setText(must.getAmount());
-                periodTextView.setText(must.getPeriod());
+                timeRangeTextView.setText(must.getCheckTimeRange());
+
+
+                String[] amountArray = getResources().getStringArray(R.array.amount);
+                amountTextView.setText(amountArray[must.getAmount()]);
+                periodTextView.setText(must.getStartDate() + " ~ " + must.getEndDate());
 
 //                view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             }

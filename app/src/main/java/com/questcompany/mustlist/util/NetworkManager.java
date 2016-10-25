@@ -2,14 +2,28 @@ package com.questcompany.mustlist.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import com.questcompany.mustlist.entity.Must;
 import com.questcompany.mustlist.entity.Notice;
+import com.questcompany.mustlist.entity.User;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.lang.reflect.Type;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Created by kimkkikki on 2016. 9. 26..
@@ -18,57 +32,118 @@ import java.util.List;
 
 public class NetworkManager {
 
-    public static List<Must> getMustList(String id, Context context) {
+    private static final String TAG = "NetworkManager";
 
-        List<Must> mustList;
-        String mustData = getSharedPreferences(context, "mustData");
+    public static User postUser() {
+        HttpUtil httpUtil = new HttpUtil("/user", HttpUtil.Method.POST, null);
+        User user = null;
+        try {
+            String json = httpUtil.execute().get();
+            JSONObject jsonObject = new JSONObject(json);
+            int code = jsonObject.getInt("code");
 
-        if (mustData == null) {
-            mustList = new ArrayList<>();
-        } else {
-            Gson gson = new Gson();
-            mustList = gson.fromJson(mustData, new TypeToken<List<Must>>(){}.getType());
+            if (code == 0) {
+                String data = jsonObject.getString("data");
+                Log.d(TAG, "data : " + data);
+                Gson gson = new Gson();
+                user = gson.fromJson(data, User.class);
+            } else {
+                Log.e(TAG, "postUser: ERROR");
+            }
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
         }
+
+        return user;
+    }
+
+    public static List<Must> getMustList() {
+        List<Must> mustList = null;
+        HttpUtil httpUtil = new HttpUtil("/must/list", HttpUtil.Method.GET, null);
+        try {
+            String json = httpUtil.execute().get();
+            JSONObject jsonObject = new JSONObject(json);
+            int code = jsonObject.getInt("code");
+
+            if (code == 0) {
+                Log.d(TAG, "success : " + json);
+                String data = jsonObject.getString("data");
+                mustList = new Gson().fromJson(data, new TypeToken<List<Must>>(){}.getType());
+            } else {
+                Log.e(TAG, "addMust: ERROR");
+            }
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
+//        List<Must> mustList;
+//        String mustData = getSharedPreferences(context, "mustData");
+//
+//        if (mustData == null) {
+//            mustList = new ArrayList<>();
+//        } else {
+//            mustList = new Gson().fromJson(mustData, new TypeToken<List<Must>>(){}.getType());
+//        }
 
         return mustList;
     }
 
-    public static Must previewAddMust(String startDay, String period, String amount, String timeRange) {
-        Must must = new Must();
+    public static Must previewAddMust(Must must) {
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").create();
+        HttpUtil httpUtil = new HttpUtil("/must/preview", HttpUtil.Method.POST, gson.toJson(must));
+        try {
+            String json = httpUtil.execute().get();
+            JSONObject jsonObject = new JSONObject(json);
+            int code = jsonObject.getInt("code");
 
-        //TODO: 서버 API를 호출하도록 변경 필요
-        {
-            must.setStartDay(startDay);
-            must.setPeriod(period);
-            must.setAmount(amount);
-            must.setTimeRange(timeRange);
+            if (code == 0) {
+                String data = jsonObject.getString("data");
+                Log.d(TAG, "data : " + data);
+                must = gson.fromJson(data, Must.class);
+            } else {
+                Log.e(TAG, "previewAddMust: ERROR");
+            }
 
-            must.setDefaultPoint(100);
-            must.setSuccessPoint(100);
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
         }
 
         return must;
     }
 
-    public static void addMust(Context context, String name, String startDay, String period, String amount, String timeRange) {
-
-        // SharedPreferences 를 쓰도록 임시로 구현
-        Must must = new Must(name, startDay, period, amount, timeRange);
-
+    public static void addMust(Must must) {
         Gson gson = new Gson();
+        HttpUtil httpUtil = new HttpUtil("/must", HttpUtil.Method.POST, gson.toJson(must));
+        try {
+            String json = httpUtil.execute().get();
+            JSONObject jsonObject = new JSONObject(json);
+            int code = jsonObject.getInt("code");
 
-        String arrayString = getSharedPreferences(context, "mustData");
-        List<Must> list;
-        if (arrayString == null) {
-            // first
-            list = new ArrayList<>();
-            list.add(must);
-        } else {
-            list = gson.fromJson(arrayString, new TypeToken<List<Must>>(){}.getType());
-            list.add(must);
+            if (code == 0) {
+                Log.d(TAG, "success : " + json);
+            } else {
+                Log.e(TAG, "addMust: ERROR");
+            }
+
+        } catch (ExecutionException | InterruptedException | JSONException e) {
+            e.printStackTrace();
         }
-        String jsonString = gson.toJson(list);
-        saveSharedPreferences(context, "mustData", jsonString);
+//
+//         SharedPreferences 를 쓰도록 임시로 구현
+//        String arrayString = getSharedPreferences(context, "mustData");
+//        List<Must> list;
+//        if (arrayString == null) {
+//            // first
+//            list = new ArrayList<>();
+//            list.add(must);
+//        } else {
+//            list = gson.fromJson(arrayString, new TypeToken<List<Must>>(){}.getType());
+//            list.add(must);
+//        }
+//        String jsonString = gson.toJson(list);
+//        saveSharedPreferences(context, "mustData", jsonString);
     }
 
     private static void saveSharedPreferences(Context context, String key, String value) {

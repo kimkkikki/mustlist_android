@@ -12,6 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.questcompany.mustlist.entity.User;
+import com.questcompany.mustlist.util.NetworkManager;
+import com.questcompany.mustlist.util.PrefUtil;
+import com.questcompany.mustlist.util.Singleton;
+
 public class WelcomeActivity extends AppCompatActivity {
 
     private static final String TAG = "WelcomeActivity";
@@ -37,6 +42,19 @@ public class WelcomeActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "welcomeViewPager is null");
         }
+
+        User user;
+        if(!PrefUtil.isUser(this)) {
+            user = NetworkManager.postUser();
+            PrefUtil.setUser(this, user);
+            Log.d(TAG, "user: " + user);
+        } else {
+            user = PrefUtil.getUser(this);
+            Log.d(TAG, "is registered user : " + user);
+        }
+
+        Singleton singleton = Singleton.getInstance();
+        singleton.setIdAndKey(user.getId(), user.getKey());
     }
 
 
