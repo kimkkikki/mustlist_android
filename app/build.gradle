@@ -1,10 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        /* TODO(developer): Configure to sign app with a release key for testing.
+        release {
+            storeFile file('path/to/release/signing/key')
+            keyAlias 'release_key_alias'
+            keyPassword "${password}"
+            storePassword "${password}"
+        }*/
+    }
     compileSdkVersion 24
     buildToolsVersion "24.0.1"
     defaultConfig {
-        applicationId "com.questcompany.mustlist"
+        applicationId "io.questcompany.mustlist"
         minSdkVersion 15
         targetSdkVersion 24
         versionCode 1
@@ -13,8 +22,10 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            // TODO(developer): uncomment below once config above is complete and uncommented.
+            // signingConfig signingConfigs.release
         }
     }
 }

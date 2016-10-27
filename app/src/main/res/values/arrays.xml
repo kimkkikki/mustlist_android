@@ -18,6 +18,14 @@
         <item>50,000원</item>
         <item>100,000원</item>
     </array>
+    <array name="in_app_purchase_items">
+        <item>mustlist_amount_0</item>
+        <item>mustlist_amount_1</item>
+        <item>mustlist_amount_2</item>
+        <item>mustlist_amount_3</item>
+        <item>mustlist_amount_4</item>
+        <item>mustlist_amount_5</item>
+    </array>
     <array name="time_range">
         <item>선택안함</item>
         <item>00~02시</item>

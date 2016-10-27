@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.questcompany.mustlist">
+    package="io.questcompany.mustlist">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.android.vending.CHECK_LICENSE"/>
+    <uses-permission android:name="com.android.vending.BILLING"/>
 
     <application
         android:allowBackup="true"
@@ -10,16 +12,16 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WelcomeActivity">
+        <activity android:name="io.questcompany.mustlist.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"/>
-        <activity android:name=".AddActivity" android:windowSoftInputMode="stateAlwaysVisible"/>
-        <activity android:name=".NoticeActivity"/>
+        <activity android:name="io.questcompany.mustlist.MainActivity"/>
+        <activity android:name="io.questcompany.mustlist.AddActivity" android:windowSoftInputMode="stateAlwaysVisible"/>
+        <activity android:name="io.questcompany.mustlist.NoticeActivity"/>
     </application>
 
 </manifest>
