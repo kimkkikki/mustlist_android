@@ -73,50 +73,50 @@ import java.util.List;
  */
 public class IabHelper {
     // Is debug logging enabled?
-    boolean mDebugLog = false;
-    String mDebugTag = "IabHelper";
+    private boolean mDebugLog = false;
+    private String mDebugTag = "IabHelper";
 
     // Is setup done?
-    boolean mSetupDone = false;
+    private boolean mSetupDone = false;
 
     // Has this object been disposed of? (If so, we should ignore callbacks, etc)
-    boolean mDisposed = false;
+    private boolean mDisposed = false;
 
     // Do we need to dispose this object after an in-progress asynchronous operation?
-    boolean mDisposeAfterAsync = false;
+    private boolean mDisposeAfterAsync = false;
 
     // Are subscriptions supported?
-    boolean mSubscriptionsSupported = false;
+    private boolean mSubscriptionsSupported = false;
 
     // Is subscription update supported?
-    boolean mSubscriptionUpdateSupported = false;
+    private boolean mSubscriptionUpdateSupported = false;
 
     // Is an asynchronous operation in progress?
     // (only one at a time can be in progress)
-    boolean mAsyncInProgress = false;
+    private boolean mAsyncInProgress = false;
 
     // Ensure atomic access to mAsyncInProgress and mDisposeAfterAsync.
     private final Object mAsyncInProgressLock = new Object();
 
     // (for logging/debugging)
     // if mAsyncInProgress == true, what asynchronous operation is in progress?
-    String mAsyncOperation = "";
+    private String mAsyncOperation = "";
 
     // Context we were passed during initialization
-    Context mContext;
+    private Context mContext;
 
     // Connection to the service
-    IInAppBillingService mService;
-    ServiceConnection mServiceConn;
+    private IInAppBillingService mService;
+    private ServiceConnection mServiceConn;
 
     // The request code used to launch purchase flow
-    int mRequestCode;
+    private int mRequestCode;
 
     // The item type of the current purchase flow
-    String mPurchasingItemType;
+    private String mPurchasingItemType;
 
     // Public key for verifying signature, in base64 encoding
-    String mSignatureBase64 = null;
+    private String mSignatureBase64 = null;
 
     // Billing response codes
     public static final int BILLING_RESPONSE_RESULT_OK = 0;
@@ -855,7 +855,7 @@ public class IabHelper {
 
 
     // Checks that setup was done; if not, throws an exception.
-    void checkSetupDone(String operation) {
+    private void checkSetupDone(String operation) {
         if (!mSetupDone) {
             logError("Illegal state for operation (" + operation + "): IAB helper is not set up.");
             throw new IllegalStateException("IAB helper is not set up. Can't perform operation: " + operation);
@@ -863,7 +863,7 @@ public class IabHelper {
     }
 
     // Workaround to bug where sometimes response codes come as Long instead of Integer
-    int getResponseCodeFromBundle(Bundle b) {
+    private int getResponseCodeFromBundle(Bundle b) {
         Object o = b.get(RESPONSE_CODE);
         if (o == null) {
             logDebug("Bundle with null response code, assuming OK (known issue)");
@@ -879,7 +879,7 @@ public class IabHelper {
     }
 
     // Workaround to bug where sometimes response codes come as Long instead of Integer
-    int getResponseCodeFromIntent(Intent i) {
+    private int getResponseCodeFromIntent(Intent i) {
         Object o = i.getExtras().get(RESPONSE_CODE);
         if (o == null) {
             logError("Intent with no response code, assuming OK (known issue)");
@@ -894,7 +894,7 @@ public class IabHelper {
         }
     }
 
-    void flagStartAsync(String operation) throws IabAsyncInProgressException {
+    private void flagStartAsync(String operation) throws IabAsyncInProgressException {
         synchronized (mAsyncInProgressLock) {
             if (mAsyncInProgress) {
                 throw new IabAsyncInProgressException("Can't start async operation (" +
@@ -907,7 +907,7 @@ public class IabHelper {
         }
     }
 
-    void flagEndAsync() {
+    private void flagEndAsync() {
         synchronized (mAsyncInProgressLock) {
             logDebug("Ending async operation: " + mAsyncOperation);
             mAsyncOperation = "";
@@ -933,7 +933,7 @@ public class IabHelper {
         }
     }
 
-    int queryPurchases(Inventory inv, String itemType) throws JSONException, RemoteException {
+    private int queryPurchases(Inventory inv, String itemType) throws JSONException, RemoteException {
         // Query purchases
         logDebug("Querying owned items, item type: " + itemType);
         logDebug("Package name: " + mContext.getPackageName());
@@ -996,7 +996,7 @@ public class IabHelper {
         return verificationFailed ? IABHELPER_VERIFICATION_FAILED : BILLING_RESPONSE_RESULT_OK;
     }
 
-    int querySkuDetails(String itemType, Inventory inv, List<String> moreSkus)
+    private int querySkuDetails(String itemType, Inventory inv, List<String> moreSkus)
             throws RemoteException, JSONException {
         logDebug("Querying SKU details.");
         ArrayList<String> skuList = new ArrayList<String>();
@@ -1064,9 +1064,9 @@ public class IabHelper {
         return BILLING_RESPONSE_RESULT_OK;
     }
 
-    void consumeAsyncInternal(final List<Purchase> purchases,
-                              final OnConsumeFinishedListener singleListener,
-                              final OnConsumeMultiFinishedListener multiListener)
+    private void consumeAsyncInternal(final List<Purchase> purchases,
+                                      final OnConsumeFinishedListener singleListener,
+                                      final OnConsumeMultiFinishedListener multiListener)
         throws IabAsyncInProgressException {
         final Handler handler = new Handler();
         flagStartAsync("consume");
@@ -1102,15 +1102,15 @@ public class IabHelper {
         })).start();
     }
 
-    void logDebug(String msg) {
+    private void logDebug(String msg) {
         if (mDebugLog) Log.d(mDebugTag, msg);
     }
 
-    void logError(String msg) {
+    private void logError(String msg) {
         Log.e(mDebugTag, "In-app billing error: " + msg);
     }
 
-    void logWarn(String msg) {
+    private void logWarn(String msg) {
         Log.w(mDebugTag, "In-app billing warning: " + msg);
     }
 }
