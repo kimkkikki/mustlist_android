@@ -22,45 +22,45 @@ import org.json.JSONObject;
  * Represents an in-app billing purchase.
  */
 public class Purchase {
-    String mItemType;  // ITEM_TYPE_INAPP or ITEM_TYPE_SUBS
-    String mOrderId;
-    String mPackageName;
-    String mSku;
-    long mPurchaseTime;
-    int mPurchaseState;
-    String mDeveloperPayload;
-    String mToken;
-    String mOriginalJson;
-    String mSignature;
-    boolean mIsAutoRenewing;
+    String itemType;  // ITEM_TYPE_INAPP or ITEM_TYPE_SUBS
+    String orderId;
+    String packageName;
+    String sku;
+    long purchaseTime;
+    int purchaseState;
+    String developerPayload;
+    String token;
+    String originalJson;
+    String signature;
+    boolean isAutoRenewing;
 
     public Purchase(String itemType, String jsonPurchaseInfo, String signature) throws JSONException {
-        mItemType = itemType;
-        mOriginalJson = jsonPurchaseInfo;
-        JSONObject o = new JSONObject(mOriginalJson);
-        mOrderId = o.optString("orderId");
-        mPackageName = o.optString("packageName");
-        mSku = o.optString("productId");
-        mPurchaseTime = o.optLong("purchaseTime");
-        mPurchaseState = o.optInt("purchaseState");
-        mDeveloperPayload = o.optString("developerPayload");
-        mToken = o.optString("token", o.optString("purchaseToken"));
-        mIsAutoRenewing = o.optBoolean("autoRenewing");
-        mSignature = signature;
+        this.itemType = itemType;
+        originalJson = jsonPurchaseInfo;
+        JSONObject o = new JSONObject(originalJson);
+        orderId = o.optString("orderId");
+        packageName = o.optString("packageName");
+        sku = o.optString("productId");
+        purchaseTime = o.optLong("purchaseTime");
+        purchaseState = o.optInt("purchaseState");
+        developerPayload = o.optString("developerPayload");
+        token = o.optString("token", o.optString("purchaseToken"));
+        isAutoRenewing = o.optBoolean("autoRenewing");
+        this.signature = signature;
     }
 
-    public String getItemType() { return mItemType; }
-    public String getOrderId() { return mOrderId; }
-    public String getPackageName() { return mPackageName; }
-    public String getSku() { return mSku; }
-    public long getPurchaseTime() { return mPurchaseTime; }
-    public int getPurchaseState() { return mPurchaseState; }
-    public String getDeveloperPayload() { return mDeveloperPayload; }
-    public String getToken() { return mToken; }
-    public String getOriginalJson() { return mOriginalJson; }
-    public String getSignature() { return mSignature; }
-    public boolean isAutoRenewing() { return mIsAutoRenewing; }
+    public String getItemType() { return itemType; }
+    public String getOrderId() { return orderId; }
+    public String getPackageName() { return packageName; }
+    public String getSku() { return sku; }
+    public long getPurchaseTime() { return purchaseTime; }
+    public int getPurchaseState() { return purchaseState; }
+    public String getDeveloperPayload() { return developerPayload; }
+    public String getToken() { return token; }
+    public String getOriginalJson() { return originalJson; }
+    public String getSignature() { return signature; }
+    public boolean isAutoRenewing() { return isAutoRenewing; }
 
     @Override
-    public String toString() { return "PurchaseInfo(type:" + mItemType + "):" + mOriginalJson; }
+    public String toString() { return "PurchaseInfo(type:" + itemType + "):" + originalJson; }
 }

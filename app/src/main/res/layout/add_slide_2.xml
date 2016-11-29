@@ -87,23 +87,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:gravity="end"
-                android:text="@string/preview_time_range"/>
-            <TextView
-                android:id="@+id/preview_time_range"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:gravity="center"/>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="end"
                 android:text="@string/preview_default_point"/>
             <TextView
                 android:id="@+id/preview_default_point"

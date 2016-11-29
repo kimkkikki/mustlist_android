@@ -1,6 +1,5 @@
 package io.questcompany.mustlist.util;
 
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,7 +12,7 @@ import java.util.Locale;
 
 public class DateUtil {
 
-    public static String getDateStringWithDay(int day) {
+    public static Integer getDateIntegerWithDay(int day) {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
 
@@ -24,20 +23,20 @@ public class DateUtil {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
 
-        return simpleDateFormat.format(date);
+        return Integer.parseInt(simpleDateFormat.format(date));
     }
 
-    public static String getDateStringWithWeek(int week) {
+    public static Integer getDateIntegerWithWeek(int startDay, int week) {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(date);
-        calendar.add(Calendar.WEEK_OF_YEAR, week + 1);
+        calendar.add(Calendar.DATE, ((startDay - 1) + (7 * (week + 1))));
 
         date = calendar.getTime();
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
 
-        return simpleDateFormat.format(date);
+        return Integer.parseInt(simpleDateFormat.format(date));
     }
 }

@@ -1,5 +1,7 @@
 package io.questcompany.mustlist.util;
 
+import io.questcompany.mustlist.entity.User;
+
 /**
  * Created by kimkkikki on 2016. 10. 21..
  * Singleton Pattern
@@ -7,8 +9,8 @@ package io.questcompany.mustlist.util;
 
 public class Singleton {
     private static Singleton uniqueInstance = new Singleton();
-    private String _id;
-    private String _key;
+
+    private User user;
 
     private Singleton() {}
 
@@ -17,15 +19,24 @@ public class Singleton {
     }
 
     public void setIdAndKey(String id, String key) {
-        _id = id;
-        _key = key;
+        user = new User();
+        user.setId(id);
+        user.setKey(key);
     }
 
     public String getId() {
-        return _id;
+        return user.getId();
     }
 
     public String getKey() {
-        return _key;
+        return user.getKey();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

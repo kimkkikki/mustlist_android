@@ -48,13 +48,11 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
     private int startDaySelected = 0;
     private int periodSelected = 0;
     private int amountSelected = 0;
-    private int timeRangeSelected = 0;
     private int pageOffset = 0;
 
     private String[] startDayArray;
     private String[] periodArray;
     private String[] amountArray;
-    private String[] timeRangeArray;
     private String[] inAppPurchaseItemArray;
 
     private Must must;
@@ -107,7 +105,6 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
         startDayArray = getResources().getStringArray(R.array.start_day);
         periodArray = getResources().getStringArray(R.array.period);
         amountArray = getResources().getStringArray(R.array.amount);
-        timeRangeArray = getResources().getStringArray(R.array.time_range);
         inAppPurchaseItemArray = getResources().getStringArray(R.array.in_app_purchase_items);
     }
 
@@ -201,9 +198,12 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
             /** TODO: for security, generate your payload here for verification. See the comments on
              *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
              *        an empty string, but on a production app you should carefully generate this. */
-            String payload = "123412345123";
+            String payload = NetworkManager.getPayload(AddActivity.this);
 
             try {
+                //TODO : 임시로 서버 저장도 넣어놓음
+                must.setDeveloperPayload(payload);
+                addMust();
                 iabHelper.launchPurchaseFlow(AddActivity.this, inAppPurchaseItemArray[amountSelected], RC_REQUEST, iabPurchaseFinishedListener, payload);
             } catch (IabHelper.IabAsyncInProgressException e) {
                 Log.d(TAG, "Error launching purchase flow. Another async operation in progress.");
@@ -255,6 +255,7 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
                 Log.d(TAG, "Consumption successful. Provisioning.");
 
                 // 소진이 완료되면 서버에 전송
+//                NetworkManager.purchaseSuccess(AddActivity.this, purchase);
                 addMust();
             }
             else {
@@ -281,12 +282,14 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
          *    이 payload값을 저장하고 검증할 수 있는 자체적인 서버를 구축하는것을 권장합니다.
          */
 
+        must.setDeveloperPayload(payload);
+
         return true;
     }
 
     // 서버에 Mustlist 추가
     private void addMust() {
-        NetworkManager.addMust(AddActivity.this ,must);
+        NetworkManager.addMust(AddActivity.this, must);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(AddActivity.this);
         alert.setPositiveButton("확인", new DialogInterface.OnClickListener() {
@@ -306,7 +309,6 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
         private Spinner startDaySpinner;
         private Spinner periodSpinner;
         private Spinner amountSpinner;
-        private Spinner timeRangeSpinner;
         private Button nextButton;
         private Button okButton;
 
@@ -342,9 +344,8 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
             }
 
             must.setName(addTitleEditText.getText().toString());
-            must.setStartDate(DateUtil.getDateStringWithDay(startDaySelected));
-            must.setEndDate(DateUtil.getDateStringWithWeek(periodSelected));
-            must.setCheckTimeRange(timeRangeArray[timeRangeSelected]);
+            must.setStartDate(DateUtil.getDateIntegerWithDay(startDaySelected));
+            must.setEndDate(DateUtil.getDateIntegerWithWeek(startDaySelected, periodSelected));
             must.setAmount(amountSelected);
 
             Must serverReceivedData = NetworkManager.previewAddMust(AddActivity.this, must);
@@ -357,7 +358,6 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
                 TextView startDayTextView = (TextView) findViewById(R.id.preview_start_day);
                 TextView periodTextView = (TextView) findViewById(R.id.preview_period);
                 TextView amountTextView = (TextView) findViewById(R.id.preview_amount);
-                TextView timeRangeTextView = (TextView) findViewById(R.id.preview_time_range);
                 TextView defaultPointTextView = (TextView) findViewById(R.id.preview_default_point);
                 TextView successPointTextView = (TextView) findViewById(R.id.preview_success_point);
 
@@ -365,7 +365,6 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
                 startDayTextView.setText(startDayArray[startDaySelected]);
                 periodTextView.setText(periodArray[periodSelected] + "(" + must.getStartDate() + "~" + must.getEndDate() + ")");
                 amountTextView.setText(amountArray[amountSelected]);
-                timeRangeTextView.setText(timeRangeArray[timeRangeSelected]);
 
                 defaultPointTextView.setText(String.format(Locale.KOREA, "%d", must.getDefaultPoint()));
                 successPointTextView.setText(String.format(Locale.KOREA, "%d", must.getSuccessPoint()));
@@ -436,21 +435,6 @@ public class AddActivity extends AppCompatActivity implements IabBroadcastReceiv
                             amountSelected = i;
                         }
 
-                        @Override
-                        public void onNothingSelected(AdapterView<?> adapterView) {
-                        }
-                    });
-                }
-            }
-
-            if (timeRangeSpinner == null) {
-                timeRangeSpinner = (Spinner) findViewById(R.id.add_time_range_spinner);
-                if (timeRangeSpinner != null) {
-                    timeRangeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                        @Override
-                        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                            timeRangeSelected = i;
-                        }
                         @Override
                         public void onNothingSelected(AdapterView<?> adapterView) {
                         }

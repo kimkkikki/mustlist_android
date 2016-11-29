@@ -109,27 +109,6 @@
         android:layout_toRightOf="@+id/add_amount_spinner"
         android:layout_toEndOf="@+id/add_amount_spinner" />
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/add_time_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="성공 체크 시간대"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/add_amount_spinner" />
-
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/add_time_range_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/time_range"
-        android:layout_below="@+id/add_amount_spinner"
-        android:layout_alignBaseline="@+id/add_time_text_view"
-        android:layout_alignBottom="@+id/add_time_text_view"
-        android:layout_toRightOf="@+id/add_time_text_view"
-        android:layout_toEndOf="@+id/add_time_text_view"/>
-
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/add_next_button"
         android:text="@string/add_ok"
@@ -137,7 +116,7 @@
         android:textColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/add_time_range_spinner"
+        android:layout_below="@+id/add_amount_spinner"
         android:layout_margin="10dp"/>
 
 </RelativeLayout>

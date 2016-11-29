@@ -2,6 +2,8 @@ package io.questcompany.mustlist;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.PersistableBundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -42,21 +44,33 @@ public class WelcomeActivity extends AppCompatActivity {
         } else {
             Log.e(TAG, "welcomeViewPager is null");
         }
+    }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getUserInformation();
+    }
+
+    private void getUserInformation() {
         User user;
         if(!PrefUtil.isUser(this)) {
             user = NetworkManager.postUser(this);
-            PrefUtil.setUser(this, user);
-            Log.d(TAG, "user: " + user);
+            if (user != null) {
+                PrefUtil.setUser(this, user);
+                Log.d(TAG, "user: " + user);
+            }
         } else {
             user = PrefUtil.getUser(this);
             Log.d(TAG, "is registered user : " + user);
         }
 
-        Singleton singleton = Singleton.getInstance();
-        singleton.setIdAndKey(user.getId(), user.getKey());
+        if (user != null) {
+            Singleton singleton = Singleton.getInstance();
+            singleton.setIdAndKey(user.getId(), user.getKey());
+            singleton.setUser(NetworkManager.getUser(this));
+        }
     }
-
 
     private class WelcomeViewPagerAdapter extends PagerAdapter {
         private LayoutInflater layoutInflater;
@@ -75,7 +89,7 @@ public class WelcomeActivity extends AppCompatActivity {
                     startButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            launchHomeScreen();
+                            goMain();
                         }
                     });
                 }
@@ -100,11 +114,17 @@ public class WelcomeActivity extends AppCompatActivity {
             container.removeView(view);
         }
 
-        private void launchHomeScreen() {
-            Log.d(TAG, "launchHomeScreen: start");
+        private void goMain() {
+            Log.d(TAG, "goMain: start");
 //            prefManager.setFirstTimeLaunch(false);
-            startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
-            finish();
+            Singleton singleton = Singleton.getInstance();
+            if (singleton.getId() != null && singleton.getKey() != null) {
+                startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
+                finish();
+            } else {
+                getUserInformation();
+                goMain();
+            }
         }
     }
 }

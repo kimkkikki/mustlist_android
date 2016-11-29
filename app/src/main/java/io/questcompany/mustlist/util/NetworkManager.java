@@ -1,5 +1,6 @@
 package io.questcompany.mustlist.util;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -28,6 +29,9 @@ public class NetworkManager {
     private static final String TAG = "NetworkManager";
 
     private static String sendToServer(Context context, String endPoint, HttpUtil.Method method, String body) {
+        ProgressDialog progressDialog = new ProgressDialog(context, ProgressDialog.STYLE_SPINNER);
+        progressDialog.show();
+
         HttpUtil httpUtil = new HttpUtil(endPoint, method, body);
         String data = null;
         try {
@@ -66,11 +70,18 @@ public class NetworkManager {
             Log.e(TAG, "sendToServer Exception ");
         }
 
+        progressDialog.dismiss();
+
         return data;
     }
 
     public static User postUser(Context context) {
         String data = sendToServer(context, "/user", HttpUtil.Method.POST, null);
+        return new Gson().fromJson(data, User.class);
+    }
+
+    public static User getUser(Context context) {
+        String data = sendToServer(context, "/user", HttpUtil.Method.GET, null);
         return new Gson().fromJson(data, User.class);
     }
 
@@ -92,5 +103,13 @@ public class NetworkManager {
     public static List<Notice> getNotice(Context context) {
         String data = sendToServer(context, "/notice", HttpUtil.Method.GET, null);
         return new Gson().fromJson(data, new TypeToken<List<Notice>>(){}.getType());
+    }
+
+    public static String getPayload(Context context) {
+        return sendToServer(context, "/billing/payload", HttpUtil.Method.GET, null);
+    }
+
+    public static void purchaseSuccess(Context context, Purchase purchase) {
+        sendToServer(context, "/billing", HttpUtil.Method.POST, new Gson().toJson(purchase));
     }
 }

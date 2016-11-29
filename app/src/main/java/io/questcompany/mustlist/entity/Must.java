@@ -5,22 +5,26 @@ package io.questcompany.mustlist.entity;
  * preview result object
  */
 public class Must {
+    private Integer index;
     private String name;
     private Integer amount;
-    private String checkTimeRange;
     private Integer defaultPoint;
     private Integer successPoint;
 
-    private String startDate;
-    private String endDate;
+    private Integer startDate;
+    private Integer endDate;
+
+    private String developerPayload;
 
     public Must() {
     }
 
-    public Must(String name, String startDay, String period, Integer amount, String checkTimeRange) {
-        this.name = name;
-        this.amount = amount;
-        this.checkTimeRange = checkTimeRange;
+    public Integer getIndex() {
+        return index;
+    }
+
+    public void setIndex(Integer index) {
+        this.index = index;
     }
 
     public String getName() {
@@ -35,16 +39,8 @@ public class Must {
         return amount;
     }
 
-    public String getCheckTimeRange() {
-        return checkTimeRange;
-    }
-
     public void setAmount(Integer amount) {
         this.amount = amount;
-    }
-
-    public void setCheckTimeRange(String checkTimeRange) {
-        this.checkTimeRange = checkTimeRange;
     }
 
     public void setDefaultPoint(Integer defaultPoint) {
@@ -63,30 +59,41 @@ public class Must {
         return successPoint;
     }
 
-    public String getStartDate() {
+    public Integer getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(Integer startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public Integer getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(Integer endDate) {
         this.endDate = endDate;
+    }
+
+    public String getDeveloperPayload() {
+        return developerPayload;
+    }
+
+    public void setDeveloperPayload(String developerPayload) {
+        this.developerPayload = developerPayload;
     }
 
     @Override
     public String toString() {
         return "Must{" +
-                "name='" + name + '\'' +
-                ", amount='" + amount + '\'' +
-                ", checkTimeRange='" + checkTimeRange + '\'' +
+                "index=" + index +
+                ", name='" + name + '\'' +
+                ", amount=" + amount +
                 ", defaultPoint=" + defaultPoint +
                 ", successPoint=" + successPoint +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", developerPayload='" + developerPayload + '\'' +
                 '}';
     }
 }

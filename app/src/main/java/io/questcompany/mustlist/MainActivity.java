@@ -29,6 +29,7 @@ import android.widget.Toast;
 import io.questcompany.mustlist.entity.Must;
 import io.questcompany.mustlist.util.NetworkManager;
 import io.questcompany.mustlist.util.PrefUtil;
+import io.questcompany.mustlist.util.Singleton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -149,6 +150,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else {
             sideIdTextView.setText(PrefUtil.getId(this));
         }
+
+        if (sidePointTextView != null) {
+            Singleton singleton = Singleton.getInstance();
+            sidePointTextView.setText("" + singleton.getUser().getPoint());
+        }
     }
 
     // Tool Bar
@@ -184,6 +190,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (id) {
             case R.id.side_notice:
                 startActivity(new Intent(MainActivity.this, NoticeActivity.class));
+                break;
+
+            case R.id.side_point_change:
+                startActivity(new Intent(MainActivity.this, PointActivity.class));
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
@@ -222,14 +232,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 view = inflaterCompat.inflate(R.layout.main_list_view, viewGroup, false);
 
                 TextView nameTextView = (TextView) view.findViewById(R.id.main_list_name);
-                TextView timeRangeTextView = (TextView) view.findViewById(R.id.main_list_time_range);
-                TextView remainCountTextView = (TextView) view.findViewById(R.id.main_list_remain_count);
                 TextView amountTextView = (TextView) view.findViewById(R.id.main_list_amount);
                 TextView periodTextView = (TextView) view.findViewById(R.id.main_list_period);
 
                 Must must = mustList.get(i);
                 nameTextView.setText(must.getName());
-                timeRangeTextView.setText(must.getCheckTimeRange());
 
 
                 String[] amountArray = getResources().getStringArray(R.array.amount);

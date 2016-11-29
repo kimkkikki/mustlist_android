@@ -7,6 +7,8 @@ package io.questcompany.mustlist.entity;
 public class User {
     private String id;
     private String key;
+    private String deviceId;
+    private Integer point;
 
     public String getId() {
         return id;
@@ -24,11 +26,29 @@ public class User {
         this.key = key;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public Integer getPoint() {
+        return point;
+    }
+
+    public void setPoint(Integer point) {
+        this.point = point;
+    }
+
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
                 ", key='" + key + '\'' +
+                ", deviceId='" + deviceId + '\'' +
+                ", point=" + point +
                 '}';
     }
 }

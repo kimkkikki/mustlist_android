@@ -734,9 +734,9 @@ public class IabHelper {
         checkNotDisposed();
         checkSetupDone("consume");
 
-        if (!itemInfo.mItemType.equals(ITEM_TYPE_INAPP)) {
+        if (!itemInfo.itemType.equals(ITEM_TYPE_INAPP)) {
             throw new IabException(IABHELPER_INVALID_CONSUMPTION,
-                    "Items of type '" + itemInfo.mItemType + "' can't be consumed.");
+                    "Items of type '" + itemInfo.itemType + "' can't be consumed.");
         }
 
         try {

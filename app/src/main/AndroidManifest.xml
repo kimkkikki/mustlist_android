@@ -20,8 +20,9 @@
             </intent-filter>
         </activity>
         <activity android:name="io.questcompany.mustlist.MainActivity"/>
-        <activity android:name="io.questcompany.mustlist.AddActivity" android:windowSoftInputMode="stateAlwaysVisible"/>
+        <activity android:name="io.questcompany.mustlist.AddActivity" android:windowSoftInputMode="stateVisible"/>
         <activity android:name="io.questcompany.mustlist.NoticeActivity"/>
+        <activity android:name=".PointActivity"/>
     </application>
 
 </manifest>
