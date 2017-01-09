@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">MustList</string>
-    <string name="welcome_first">어떤일을 할때 의지가 안생기나요?</string>
-    <string name="welcome_second">MustList와 내기를 하세요</string>
-    <string name="welcome_third">만들고 싶은 의지만큼 결제하고, 성공하여 돌려받으세요</string>
+    <string name="welcome_first">Is it difficult to achieve the goal?</string>
+    <string name="welcome_second">I do not have a will to do it, do I?</string>
+    <string name="welcome_third">Make as much money as you want to make, get it back with success.</string>
     <string name="welcome_start">Start</string>
     <string name="double_back_exit">Please click BACK again to exit</string>
     <string name="main_list_add_text">Add your Mustlist</string>
@@ -36,4 +36,5 @@
     <string name="three_weeks">3 weeks</string>
     <string name="one_month">1 month</string>
     <string name="history">History</string>
+    <string name="welcome_four">With Mustlist, you can achieve your goal.</string>
 </resources>
