@@ -1,113 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<TableLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:stretchColumns="*">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/add_me_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_me"
-        android:layout_alignBaseline="@+id/add_must_title"
-        android:layout_alignBottom="@id/add_must_title"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"/>
-
-    <android.support.v7.widget.AppCompatEditText
-        android:id="@id/add_must_title"
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@id/add_me_text_view"
-        android:layout_toEndOf="@id/add_me_text_view"
-        android:layout_toLeftOf="@+id/add_and_text_view"
-        android:layout_toStartOf="@id/add_and_text_view"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:hint="@string/add_title_hint"
-        android:maxLines="1"
-        android:imeOptions="actionNext" />
+        android:layout_margin="10dp">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@id/add_and_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_and"
-        android:layout_alignBaseline="@id/add_must_title"
-        android:layout_alignBottom="@id/add_must_title"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="0px"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/add_name"/>
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/add_start_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/add_must_title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp"
-        android:entries="@array/start_day" />
+        <android.support.v7.widget.AppCompatEditText
+            android:layout_width="0px"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:id="@+id/add_must_title"
+            android:hint="@string/add_title_hint"
+            android:maxLines="1"
+            android:lines="1"
+            android:maxLength="30"
+            android:singleLine="true"
+            android:imeOptions="actionNext" />
 
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/add_day_between_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_day_between"
-        android:layout_alignBottom="@id/add_start_spinner"
-        android:layout_toRightOf="@id/add_start_spinner"
-        android:layout_toEndOf="@id/add_start_spinner"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"/>
+    </TableRow>
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/add_period_spinner"
-        android:layout_width="wrap_content"
+    <TableRow
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/add_day_between_text_view"
-        android:layout_toRightOf="@+id/add_day_between_text_view"
-        android:layout_toEndOf="@+id/add_day_between_text_view"
-        android:entries="@array/period"/>
+        android:layout_margin="10dp">
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_period"
-        android:layout_alignBottom="@id/add_period_spinner"
-        android:layout_toRightOf="@id/add_period_spinner"
-        android:layout_toEndOf="@id/add_period_spinner"
-        android:layout_marginRight="10dp"
-        android:layout_marginEnd="10dp"/>
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="0px"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/add_start_day"/>
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/add_amount_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:entries="@array/amount"
-        android:layout_below="@+id/add_start_spinner"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginStart="10dp"/>
+        <Button
+            android:id="@+id/add_start_day_picker_button"
+            android:layout_width="0px"
+            android:layout_weight="0.8"
+            android:layout_height="25dp"
+            android:background="#00ff0000"
+            android:text="@string/add_datepicker"/>
 
-    <android.support.v7.widget.AppCompatTextView
-        android:layout_width="wrap_content"
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/add_end_text"
-        android:layout_alignBaseline="@+id/add_amount_spinner"
-        android:layout_alignBottom="@+id/add_amount_spinner"
-        android:layout_toRightOf="@+id/add_amount_spinner"
-        android:layout_toEndOf="@+id/add_amount_spinner" />
+        android:layout_margin="10dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="0px"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/add_end_day"/>
+
+        <Button
+            android:id="@+id/add_end_day_picker_button"
+            android:layout_width="0px"
+            android:layout_weight="0.8"
+            android:layout_height="25dp"
+            android:background="#00ff0000"
+            android:text="@string/add_datepicker"/>
+
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="0px"
+            android:layout_weight="0.2"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/add_deposit"/>
+
+        <android.support.v7.widget.AppCompatSpinner
+            android:id="@+id/add_deposit_spinner"
+            android:layout_width="0px"
+            android:layout_weight="0.8"
+            android:layout_height="wrap_content"
+            android:entries="@array/deposit"/>
+
+    </TableRow>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/add_next_button"
@@ -116,7 +103,10 @@
         android:textColor="@android:color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/add_amount_spinner"
         android:layout_margin="10dp"/>
 
-</RelativeLayout>
+</TableLayout>
+
+
+
+

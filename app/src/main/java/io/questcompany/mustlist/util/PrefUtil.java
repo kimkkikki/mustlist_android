@@ -16,18 +16,14 @@ public class PrefUtil {
         String id = preferences.getString("id", null);
         String key = preferences.getString("key", null);
 
-        if (id != null && key != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return id != null && key != null;
     }
 
     public static User getUser(Context context) {
         SharedPreferences preferences = context.getSharedPreferences("mustlist", Context.MODE_PRIVATE);
         User user = new User();
-        user.setId(preferences.getString("id", null));
-        user.setKey(preferences.getString("key", null));
+        user.id = preferences.getString("id", null);
+        user.key = preferences.getString("key", null);
 
         return user;
     }
@@ -40,8 +36,27 @@ public class PrefUtil {
     public static void setUser(Context context, User user) {
         SharedPreferences preferences = context.getSharedPreferences("mustlist", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putString("id", user.getId());
-        editor.putString("key", user.getKey());
+        editor.putString("id", user.id);
+        editor.putString("key", user.key);
         editor.apply();
     }
+
+    public static void clear(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences("mustlist", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.clear();
+        editor.apply();
+    }
+
+//    public static void setFirstTimeLaunch(Context context, boolean isFirstTime) {
+//        SharedPreferences preferences = context.getSharedPreferences("mustlist", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor editor = preferences.edit();
+//        editor.putBoolean("firstTime", isFirstTime);
+//        editor.apply();
+//    }
+//
+//    public static boolean getFirstTimeLaunch(Context context) {
+//        SharedPreferences preferences = context.getSharedPreferences("mustlist", Context.MODE_PRIVATE);
+//        return preferences.getBoolean("firstTime", true);
+//    }
 }

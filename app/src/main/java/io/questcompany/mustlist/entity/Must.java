@@ -5,94 +5,40 @@ package io.questcompany.mustlist.entity;
  * preview result object
  */
 public class Must {
-    private Integer index;
-    private String name;
-    private Integer amount;
-    private Integer defaultPoint;
-    private Integer successPoint;
+    public Integer index;
+    public String title;
+    public Integer deposit;
+    public Integer default_point;
+    public boolean check;
+    public boolean success;
+    public boolean end;
+    public int days;
+    public int total_count;
+    public int check_count;
 
-    private Integer startDate;
-    private Integer endDate;
+    public String start_date;
+    public String end_date;
 
-    private String developerPayload;
+    public Integer success_point;
+    public String developerPayload;
 
     public Must() {
-    }
-
-    public Integer getIndex() {
-        return index;
-    }
-
-    public void setIndex(Integer index) {
-        this.index = index;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-    public void setDefaultPoint(Integer defaultPoint) {
-        this.defaultPoint = defaultPoint;
-    }
-
-    public void setSuccessPoint(Integer successPoint) {
-        this.successPoint = successPoint;
-    }
-
-    public Integer getDefaultPoint() {
-        return defaultPoint;
-    }
-
-    public Integer getSuccessPoint() {
-        return successPoint;
-    }
-
-    public Integer getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Integer startDate) {
-        this.startDate = startDate;
-    }
-
-    public Integer getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Integer endDate) {
-        this.endDate = endDate;
-    }
-
-    public String getDeveloperPayload() {
-        return developerPayload;
-    }
-
-    public void setDeveloperPayload(String developerPayload) {
-        this.developerPayload = developerPayload;
     }
 
     @Override
     public String toString() {
         return "Must{" +
                 "index=" + index +
-                ", name='" + name + '\'' +
-                ", amount=" + amount +
-                ", defaultPoint=" + defaultPoint +
-                ", successPoint=" + successPoint +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
+                ", title='" + title + '\'' +
+                ", deposit=" + deposit +
+                ", default_point=" + default_point +
+                ", check=" + check +
+                ", success=" + success +
+                ", end=" + end +
+                ", days=" + days +
+                ", start_date='" + start_date + '\'' +
+                ", end_date='" + end_date + '\'' +
+                ", success_point=" + success_point +
                 ", developerPayload='" + developerPayload + '\'' +
                 '}';
     }

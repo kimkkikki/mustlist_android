@@ -23,11 +23,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import io.questcompany.mustlist.entity.Must;
-import io.questcompany.mustlist.util.NetworkManager;
+import io.questcompany.mustlist.util.AlertUtil;
+import io.questcompany.mustlist.manager.NetworkManager;
 import io.questcompany.mustlist.util.PrefUtil;
 import io.questcompany.mustlist.util.Singleton;
 
@@ -134,10 +136,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         listViewCompat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if (mustList.size() != i) {
-                    Log.d(TAG, "onItemClick: ListView " + i);
-                } else {
+                if (i == 0) {
                     startActivity(new Intent(MainActivity.this, AddActivity.class));
+                } else {
+                    Log.d(TAG, "onItemClick: ListView " + mustList.get(i - 1));
+                    Must must = mustList.get(i - 1);
+                    if (must.check) {
+                        AlertUtil.alert(MainActivity.this, "오늘은 이미 체크했습니다");
+                    } else {
+                        NetworkManager.checkMust(MainActivity.this, mustList.get(i - 1));
+                        MainActivity.this.onResume();
+                    }
                 }
             }
         });
@@ -153,7 +162,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (sidePointTextView != null) {
             Singleton singleton = Singleton.getInstance();
-            sidePointTextView.setText("" + singleton.getUser().getPoint());
+            String pointString = "" + singleton.getUser().point;
+            sidePointTextView.setText(pointString);
         }
     }
 
@@ -221,32 +231,86 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         public View getView(int i, View view, ViewGroup viewGroup) {
             Log.d(TAG, "getView: index  " + i);
 
-            if (mustList.size() == i) {
+            if (i == 0) {
+                // Add Must 버튼 처리 부분
                 Context context = viewGroup.getContext();
                 LayoutInflater inflaterCompat = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflaterCompat.inflate(R.layout.main_list_view_empty, viewGroup, false);
             } else {
-                //TODO: 데이터 있을때 처리 필요 아래는 임시로 추가 오브젝트
+                // Must List Data 처리 부분
                 Context context = viewGroup.getContext();
                 LayoutInflater inflaterCompat = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 view = inflaterCompat.inflate(R.layout.main_list_view, viewGroup, false);
 
                 TextView nameTextView = (TextView) view.findViewById(R.id.main_list_name);
-                TextView amountTextView = (TextView) view.findViewById(R.id.main_list_amount);
+                TextView depositTextView = (TextView) view.findViewById(R.id.main_list_deposit);
                 TextView periodTextView = (TextView) view.findViewById(R.id.main_list_period);
+                TextView remainCountTextView = (TextView) view.findViewById(R.id.main_list_remain_count);
+                TextView checkCountTextView = (TextView) view.findViewById(R.id.main_list_check_count);
 
-                Must must = mustList.get(i);
-                nameTextView.setText(must.getName());
+                Must must = mustList.get(i - 1);
+                nameTextView.setText(must.title);
 
+                String[] depositArray = getResources().getStringArray(R.array.deposit);
+                depositTextView.setText(depositArray[must.deposit]);
+                periodTextView.setText(must.start_date.split("T")[0] + " ~ " + must.end_date.split("T")[0]);
 
-                String[] amountArray = getResources().getStringArray(R.array.amount);
-                amountTextView.setText(amountArray[must.getAmount()]);
-                periodTextView.setText(must.getStartDate() + " ~ " + must.getEndDate());
+                // 남은 일수 계산 & 수행 일자 문자 생성
+                String remainString = "" + (must.total_count - must.check_count);
+                remainCountTextView.setText(remainString);
+                String checkString = "" + must.check_count;
+                checkCountTextView.setText(checkString);
 
 //                view.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+
+                TextView statusTag = (TextView) view.findViewById(R.id.main_list_status);
+                // In Progress Or Ended Must
+                if (must.end) {
+                    String defaultEndString = getString(R.string.main_list_status_end);
+                    if (must.success) {
+                        defaultEndString += " : " + getString(R.string.main_list_status_success);
+                        setTagBackgroundColor(view, R.drawable.round_corner_blue);
+                    } else {
+                        defaultEndString += " : " + getString(R.string.main_list_status_failure);
+                        setTagBackgroundColor(view, R.drawable.round_corner_red);
+                    }
+                    statusTag.setText(defaultEndString);
+
+                } else {
+                    statusTag.setText(R.string.main_list_status_progress);
+
+                    // Checkbox Text & Checkbox Status
+                    TextView checkboxTag = (TextView) view.findViewById(R.id.main_list_checkbox_tag);
+                    ImageView checkbox = (ImageView) view.findViewById(R.id.main_list_checkbox);
+                    if (must.check) {
+                        checkboxTag.setText(R.string.main_list_checked);
+                        checkbox.setImageResource(R.mipmap.checkbox_green);
+
+                        // Tag Color Green
+                        setTagBackgroundColor(view, R.drawable.round_corner_green);
+                    } else {
+                        checkboxTag.setText(R.string.main_list_not_checked);
+                        checkbox.setImageResource(R.mipmap.checkbox_gray);
+                    }
+                }
             }
 
             return view;
+        }
+
+        private void setTagBackgroundColor(View view, int resourceId) {
+            TextView nameTag = (TextView) view.findViewById(R.id.main_list_name_tag);
+            nameTag.setBackgroundResource(resourceId);
+            TextView periodTag = (TextView) view.findViewById(R.id.main_list_period_tag);
+            periodTag.setBackgroundResource(resourceId);
+            TextView depositTag = (TextView) view.findViewById(R.id.main_list_deposit_tag);
+            depositTag.setBackgroundResource(resourceId);
+            TextView statusTag = (TextView) view.findViewById(R.id.main_list_status);
+            statusTag.setBackgroundResource(resourceId);
+            TextView remainCountTag = (TextView) view.findViewById(R.id.main_list_remain_count_tag);
+            remainCountTag.setBackgroundResource(resourceId);
+            TextView checkCountTag = (TextView) view.findViewById(R.id.main_list_check_count_tag);
+            checkCountTag.setBackgroundResource(resourceId);
         }
     }
 }

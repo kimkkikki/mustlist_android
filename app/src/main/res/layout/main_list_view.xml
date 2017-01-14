@@ -5,25 +5,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:background="@drawable/round_corner_gray"
+            android:textColor="@android:color/white" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_checkbox_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/main_list_checkbox"
+            android:layout_toStartOf="@+id/main_list_checkbox"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/main_list_checkbox"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp"
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_name_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/preview_name"
             android:background="@drawable/round_corner_gray"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/main_list_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp" />
+            android:layout_marginStart="10dp"/>
 
     </LinearLayout>
 
@@ -36,9 +72,10 @@
         android:layout_marginBottom="10dp">
 
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_period_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/preview_period"
+            android:text="@string/main_list_period"
             android:textColor="@android:color/white"
             android:background="@drawable/round_corner_gray" />
 
@@ -49,17 +86,69 @@
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp">
+
         <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_deposit_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginLeft="10dp"
-            android:text="@string/preview_amount"
+            android:text="@string/preview_deposit"
             android:textColor="@android:color/white"
             android:background="@drawable/round_corner_gray"/>
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/main_list_amount"
+            android:id="@+id/main_list_deposit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="10dp">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_remain_count_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_list_remain_count"
+            android:textColor="@android:color/white"
+            android:background="@drawable/round_corner_gray"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_remain_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_check_count_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:text="@string/main_list_check_count"
+            android:textColor="@android:color/white"
+            android:background="@drawable/round_corner_gray"/>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/main_list_check_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

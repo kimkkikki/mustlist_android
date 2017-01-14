@@ -53,9 +53,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:gravity="end"
-                android:text="@string/preview_period"/>
+                android:text="@string/preview_end_day"/>
             <TextView
-                android:id="@+id/preview_period"
+                android:id="@+id/preview_end_day"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
@@ -70,9 +70,26 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3"
                 android:gravity="end"
-                android:text="@string/preview_amount"/>
+                android:text="@string/preview_days"/>
             <TextView
-                android:id="@+id/preview_amount"
+                android:id="@+id/preview_days"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.7"
+                android:gravity="center"/>
+        </TableRow>
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:gravity="end"
+                android:text="@string/preview_deposit"/>
+            <TextView
+                android:id="@+id/preview_deposit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"
@@ -90,23 +107,6 @@
                 android:text="@string/preview_default_point"/>
             <TextView
                 android:id="@+id/preview_default_point"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.7"
-                android:gravity="center"/>
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp">
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.3"
-                android:gravity="end"
-                android:text="@string/preview_success_point"/>
-            <TextView
-                android:id="@+id/preview_success_point"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.7"

@@ -5,41 +5,18 @@ package io.questcompany.mustlist.entity;
  * Server User Object
  */
 public class User {
-    private String id;
-    private String key;
-    private String deviceId;
-    private Integer point;
+    public String id;
+    public String key;
+    public String email;
+    public String deviceId;
+    public Integer point;
 
-    public String getId() {
-        return id;
+    public User() {
     }
 
-    public void setId(String id) {
+    public User(String id, String email) {
         this.id = id;
-    }
-
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public Integer getPoint() {
-        return point;
-    }
-
-    public void setPoint(Integer point) {
-        this.point = point;
+        this.email = email;
     }
 
     @Override
@@ -47,6 +24,7 @@ public class User {
         return "User{" +
                 "id='" + id + '\'' +
                 ", key='" + key + '\'' +
+                ", email='" + email + '\'' +
                 ", deviceId='" + deviceId + '\'' +
                 ", point=" + point +
                 '}';

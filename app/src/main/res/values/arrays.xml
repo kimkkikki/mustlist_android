@@ -1,22 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="start_day">
-        <item>@string/today</item>
-        <item>@string/tomorrow</item>
-    </array>
-    <array name="period">
-        <item>@string/one_week</item>
-        <item>@string/two_weeks</item>
-        <item>@string/three_weeks</item>
-        <item>@string/one_month</item>
-    </array>
-    <array name="amount">
-        <item>1,000원</item>
-        <item>5,000원</item>
-        <item>10,000원</item>
-        <item>30,000원</item>
-        <item>50,000원</item>
-        <item>100,000원</item>
+    <array name="deposit">
+        <item>@string/deposit_0</item>
+        <item>@string/deposit_1</item>
+        <item>@string/deposit_2</item>
+        <item>@string/deposit_3</item>
+        <item>@string/deposit_4</item>
+        <item>@string/deposit_5</item>
+        <item>@string/deposit_6</item>
     </array>
     <array name="in_app_purchase_items">
         <item>mustlist_amount_0</item>

@@ -11,32 +11,43 @@ import java.util.Locale;
  */
 
 public class DateUtil {
-
-    public static Integer getDateIntegerWithDay(int day) {
+    public static String getStartDateStringWithYearAndMonthAndDay(int year, int month, int day) {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(date);
-        calendar.add(Calendar.DATE, day);
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.DATE, day);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
 
         date = calendar.getTime();
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
 
-        return Integer.parseInt(simpleDateFormat.format(date));
+        return simpleDateFormat.format(date);
     }
 
-    public static Integer getDateIntegerWithWeek(int startDay, int week) {
+    public static String getEndDateStringWithYearAndMonthAndDay(int year, int month, int day) {
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
 
         calendar.setTime(date);
-        calendar.add(Calendar.DATE, ((startDay - 1) + (7 * (week + 1))));
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.DATE, day);
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
 
         date = calendar.getTime();
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.KOREA);
 
-        return Integer.parseInt(simpleDateFormat.format(date));
+        return simpleDateFormat.format(date);
     }
 }

@@ -11,7 +11,7 @@ import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import io.questcompany.mustlist.entity.Notice;
-import io.questcompany.mustlist.util.NetworkManager;
+import io.questcompany.mustlist.manager.NetworkManager;
 
 import java.util.ArrayList;
 import java.util.List;

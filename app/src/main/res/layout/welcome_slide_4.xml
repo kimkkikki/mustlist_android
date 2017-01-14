@@ -22,13 +22,44 @@
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/welcome_start_button"
         android:text="@string/welcome_start"
-        android:background="@color/colorPrimary"
+        android:background="@color/colorGreen"
         android:textColor="@android:color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:orientation="horizontal"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_above="@id/welcome_start_button">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/sign_in_with_google_button"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:text="@string/sign_in_with_google"
+            android:background="@drawable/btn_google_signin_light_normal"/>
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/sign_in_with_facebook"
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginStart="5dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
