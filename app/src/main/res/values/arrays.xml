@@ -10,11 +10,12 @@
         <item>@string/deposit_6</item>
     </array>
     <array name="in_app_purchase_items">
-        <item>mustlist_amount_0</item>
-        <item>mustlist_amount_1</item>
-        <item>mustlist_amount_2</item>
-        <item>mustlist_amount_3</item>
-        <item>mustlist_amount_4</item>
-        <item>mustlist_amount_5</item>
+        <item>nothing</item>
+        <item>mustlist_deposit_1</item>
+        <item>mustlist_deposit_2</item>
+        <item>mustlist_deposit_3</item>
+        <item>mustlist_deposit_4</item>
+        <item>mustlist_deposit_5</item>
+        <item>mustlist_deposit_6</item>
     </array>
 </resources>

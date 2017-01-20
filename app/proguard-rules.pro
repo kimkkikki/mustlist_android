@@ -15,3 +15,6 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn okio.*
+-keep class io.questcompany.mustlist.entity.*
+-keep class io.questcompany.mustlist.manager.*

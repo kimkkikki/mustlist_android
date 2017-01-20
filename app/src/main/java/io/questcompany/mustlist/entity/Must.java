@@ -19,9 +19,6 @@ public class Must {
     public String start_date;
     public String end_date;
 
-    public Integer success_point;
-    public String developerPayload;
-
     public Must() {
     }
 
@@ -38,8 +35,6 @@ public class Must {
                 ", days=" + days +
                 ", start_date='" + start_date + '\'' +
                 ", end_date='" + end_date + '\'' +
-                ", success_point=" + success_point +
-                ", developerPayload='" + developerPayload + '\'' +
                 '}';
     }
 }

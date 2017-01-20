@@ -26,8 +26,18 @@
         </activity>
         <activity android:name="io.questcompany.mustlist.MainActivity"/>
         <activity android:name="io.questcompany.mustlist.AddActivity" android:windowSoftInputMode="stateVisible"/>
-        <activity android:name="io.questcompany.mustlist.NoticeActivity"/>
-        <activity android:name=".PointActivity"/>
-    </application>
+        <activity android:name="io.questcompany.mustlist.SettingActivity"/>
+        <activity android:name="io.questcompany.mustlist.ScoreActivity"/>
 
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="@string/facebook_login_protocol_schema" />
+            </intent-filter>
+        </activity>
+    </application>
 </manifest>

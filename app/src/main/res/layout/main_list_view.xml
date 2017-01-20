@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_list_layout"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -34,7 +35,16 @@
             android:layout_height="25dp"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"/>
+
+        <!--<Button-->
+            <!--android:id="@+id/main_list_share_button"-->
+            <!--android:layout_width="25dp"-->
+            <!--android:layout_height="25dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--android:background="@drawable/ic_share_black_48dp"/>-->
 
     </RelativeLayout>
 
@@ -100,7 +110,7 @@
             android:id="@+id/main_list_deposit_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/preview_deposit"
+            android:text="@string/add_deposit"
             android:textColor="@android:color/white"
             android:background="@drawable/round_corner_gray"/>
 
@@ -113,47 +123,47 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp">
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/main_list_remain_count_tag"
+            android:id="@+id/main_list_progress_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/main_list_remain_count"
+            android:text="@string/main_list_progress"
             android:textColor="@android:color/white"
             android:background="@drawable/round_corner_gray"/>
 
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/main_list_remain_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"/>
-
-        <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/main_list_check_count_tag"
-            android:layout_width="wrap_content"
+        <ProgressBar
+            android:id="@+id/main_list_progress"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="@string/main_list_check_count"
-            android:textColor="@android:color/white"
-            android:background="@drawable/round_corner_gray"/>
+            android:layout_marginRight="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/main_list_progress_tag"
+            android:layout_toEndOf="@+id/main_list_progress_tag"
+            android:layout_toLeftOf="@+id/main_list_progress_percent"
+            android:layout_toStartOf="@+id/main_list_progress_percent"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"/>
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/main_list_check_count"
+            android:id="@+id/main_list_progress_percent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginStart="10dp"/>
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"/>
 
-    </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

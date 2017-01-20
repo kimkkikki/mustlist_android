@@ -15,7 +15,7 @@
             android:layout_weight="0.2"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="@string/add_name"/>
+            android:text="@string/preview_name"/>
 
         <android.support.v7.widget.AppCompatEditText
             android:layout_width="0px"
@@ -73,6 +73,17 @@
             android:background="#00ff0000"
             android:text="@string/add_datepicker"/>
 
+    </TableRow>
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/add_period_guide"
+            android:textColor="@color/colorRed"/>
     </TableRow>
 
     <TableRow

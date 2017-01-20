@@ -1,5 +1,6 @@
 package io.questcompany.mustlist;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -33,9 +34,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import io.questcompany.mustlist.entity.User;
 import io.questcompany.mustlist.manager.NetworkManager;
@@ -50,40 +51,75 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private static final int GOOGLE_SIGN_IN = 8765;
 
-    private void getUserInformation(User user) {
-        if(!PrefUtil.isUser(this)) {
-            user = NetworkManager.postUser(this, user);
-            if (user != null) {
-                PrefUtil.setUser(this, user);
-                Log.d(TAG, "user: " + user);
-            }
-        } else {
-            user = PrefUtil.getUser(this);
-            Log.d(TAG, "is registered user : " + user);
-        }
+    private ProgressDialog loadingDialog;
 
-        if (user != null) {
-            Singleton singleton = Singleton.getInstance();
-            singleton.setIdAndKey(user.id, user.key);
+    private void getUserInformation(final User requestUser) {
 
-            User getUser = NetworkManager.getUser(this);
-            if (getUser != null) {
-                singleton.setUser(getUser);
-            } else {
-                PrefUtil.clear(this);
-                singleton.setIdAndKey(null, null);
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                User user;
+                if(!PrefUtil.isUser(WelcomeActivity.this)) {
+                    String FCMToken = FirebaseInstanceId.getInstance().getToken();
+                    Log.d(TAG, "onCreate: FCM Token : " + FCMToken);
+
+                    requestUser.device_id = FCMToken;
+                    user = NetworkManager.postUser(WelcomeActivity.this, requestUser);
+                    if (user != null) {
+                        PrefUtil.setUser(WelcomeActivity.this, user);
+                        Log.d(TAG, "user: " + user);
+                    }
+                } else {
+                    user = PrefUtil.getUser(WelcomeActivity.this);
+                    Log.d(TAG, "is registered user : " + user);
+                }
+
+                if (!NetworkManager.checkNetworkStatus(WelcomeActivity.this)) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            AlertUtil.alert(WelcomeActivity.this, R.string.alert_not_connected_network);
+                        }
+                    });
+                } else {
+                    if (user != null) {
+                        Singleton singleton = Singleton.getInstance();
+                        singleton.setIdAndKey(user.id, user.key);
+
+                        User getUser = NetworkManager.getUser(WelcomeActivity.this);
+                        if (getUser != null) {
+                            singleton.setUser(getUser);
+                        } else {
+                            PrefUtil.clear(WelcomeActivity.this);
+                            singleton.setIdAndKey(null, null);
+                        }
+                    }
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            goMain();
+                        }
+                    });
+                }
+
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
+
             }
-        }
+        }.start();
     }
 
     private void goMain() {
-        Log.d(TAG, "goMain: start");
+        Log.i(TAG, "goMain: start");
         Singleton singleton = Singleton.getInstance();
-        if (singleton.getId() != null && singleton.getKey() != null) {
+        if (singleton.getUser() != null) {
             startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
             finish();
         } else {
-            Log.d(TAG, "goMain: Failed");
+            AlertUtil.alert(this, R.string.alert_login_fail);
+            Log.i(TAG, "goMain: Failed : " + singleton.getUser());
         }
     }
 
@@ -97,18 +133,31 @@ public class WelcomeActivity extends AppCompatActivity {
 
                 User mustlist_user = new User(user.getUid(), user.getEmail());
                 getUserInformation(mustlist_user);
-                goMain();
             } else {
                 Log.d(TAG, "onAuthStateChanged:signed_out");
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
             }
-
-            Singleton.getInstance().stopLoading();
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (loadingDialog.isShowing())
+            loadingDialog.dismiss();
+    }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome_activity);
+
+        loadingDialog = AlertUtil.getLoadingDialog(this);
+
+        if (PrefUtil.getUser(WelcomeActivity.this) != null) {
+            if (!loadingDialog.isShowing())
+                loadingDialog.show();
+        }
 
         firebaseAuth = FirebaseAuth.getInstance();
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -148,13 +197,11 @@ public class WelcomeActivity extends AppCompatActivity {
     private void authFailureCheck(Task<AuthResult> task) {
         Log.d(TAG, "authFailureCheck : " + task.isSuccessful());
         if (!task.isSuccessful()) {
-            if (task.getException().getClass() == FirebaseAuthUserCollisionException.class) {
-                AlertUtil.alert(WelcomeActivity.this, R.string.alert_same_email);
-            } else {
-                Log.w(TAG, "authFailureCheck, exception : ", task.getException());
-                Toast.makeText(WelcomeActivity.this, R.string.alert_sign_in_fail, Toast.LENGTH_SHORT).show();
-            }
-            Singleton.getInstance().stopLoading();
+            Log.w(TAG, "authFailureCheck, exception : ", task.getException());
+            Toast.makeText(WelcomeActivity.this, R.string.alert_sign_in_fail, Toast.LENGTH_SHORT).show();
+
+            if (loadingDialog.isShowing())
+                loadingDialog.dismiss();
         }
     }
 
@@ -220,6 +267,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 });
             } else {
                 Log.d(TAG, "onActivityResult: Fail " + result.getStatus());
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
             }
 
         } else {
@@ -261,8 +310,18 @@ public class WelcomeActivity extends AppCompatActivity {
                     startGuestButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            startWithoutSignIn();
-                            Singleton.getInstance().loading(WelcomeActivity.this);
+                            if (NetworkManager.checkNetworkStatus(WelcomeActivity.this)) {
+                                loadingDialog.show();
+                                new Thread() {
+                                    @Override
+                                    public void run() {
+                                        super.run();
+                                        startWithoutSignIn();
+                                    }
+                                }.start();
+                            } else {
+                                AlertUtil.alert(WelcomeActivity.this, R.string.alert_not_connected_network);
+                            }
                         }
                     });
                 }
@@ -274,8 +333,18 @@ public class WelcomeActivity extends AppCompatActivity {
                     signWithGoogleButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            startWithGoogle();
-                            Singleton.getInstance().loading(WelcomeActivity.this);
+                            if (NetworkManager.checkNetworkStatus(WelcomeActivity.this)) {
+                                loadingDialog.show();
+                                new Thread() {
+                                    @Override
+                                    public void run() {
+                                        super.run();
+                                            startWithGoogle();
+                                    }
+                                }.start();
+                            } else {
+                                AlertUtil.alert(WelcomeActivity.this, R.string.alert_not_connected_network);
+                            }
                         }
                     });
                 }
@@ -289,8 +358,8 @@ public class WelcomeActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(LoginResult loginResult) {
                             Log.d(TAG, "Facebook Callback : Login Success");
+                            loadingDialog.show();
                             handleFacebookAccessToken(loginResult.getAccessToken());
-                            Singleton.getInstance().loading(WelcomeActivity.this);
                         }
 
                         @Override

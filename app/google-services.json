@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "104189598488-l9mlm4t7a7emol974q9734qkh101fhho.apps.googleusercontent.com",
+          "client_id": "104189598488-ujbuep1qphgomne3oumja8f2gjst2g4b.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "io.questcompany.mustlist",
-            "certificate_hash": "A54F6D00074760A48ECEDE6D746E7F70406CF437"
+            "certificate_hash": "DB49B112AADC405C4AF878B0BCFA8F21E63F4E6F"
           }
         },
         {

@@ -21,4 +21,26 @@
         android:layout_marginEnd="30dp"
         android:layout_marginRight="30dp" />
 
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/welcome_right_icon"
+        android:layout_toStartOf="@id/welcome_right_icon"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dp"
+        android:textColor="@android:color/white"
+        android:text="@string/welcome_scroll_to_right"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/welcome_right_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/ic_navigate_next_white_48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

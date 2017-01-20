@@ -1,8 +1,10 @@
 package io.questcompany.mustlist;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -22,20 +24,25 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
+
 import java.util.Calendar;
 import java.util.Date;
 
+import io.questcompany.mustlist.entity.Pay;
 import io.questcompany.mustlist.entity.Must;
 import io.questcompany.mustlist.util.AlertUtil;
 import io.questcompany.mustlist.util.DateUtil;
 import io.questcompany.mustlist.manager.NetworkManager;
+import io.questcompany.mustlist.util.PrefUtil;
 
 /**
  * Created by kimkkikki on 2016. 9. 28..
  * Add Activity
  */
 
-public class AddActivity extends AppCompatActivity {
+public class AddActivity extends AppCompatActivity implements BillingProcessor.IBillingHandler {
 
     private static final String TAG = "AddActivity";
     private int[] layouts;
@@ -45,9 +52,14 @@ public class AddActivity extends AppCompatActivity {
     private int depositSelected = 1;
     private int pageOffset = 0;
 
-    private String[] depositArray;
-
     private Must must;
+
+    // Pay
+    BillingProcessor billingProcessor;
+
+    private String[] depositArray;
+    private String[] inAppPurchaseItemArray;
+    private boolean isInitializeBilling = false;
 
     @Override
     public void onBackPressed() {
@@ -88,25 +100,121 @@ public class AddActivity extends AppCompatActivity {
         });
 
         depositArray = getResources().getStringArray(R.array.deposit);
+
+        // Pay Initialize
+        inAppPurchaseItemArray = getResources().getStringArray(R.array.in_app_purchase_items);
+        billingProcessor = new BillingProcessor(this, getString(R.string.in_app_public_key), this);
     }
 
     @Override
     protected void onDestroy() {
+        if (billingProcessor != null) {
+            billingProcessor.release();
+        }
         super.onDestroy();
-        //TODO : Billing OnDestroy;
     }
 
     // 서버에 Must 추가
-    private void addMust() {
-        NetworkManager.addMust(AddActivity.this, must);
-
-        AlertUtil.alert(AddActivity.this, R.string.alert_add_success, new DialogInterface.OnClickListener() {
+    private void addMustAndFinish() {
+        final ProgressDialog progressDialog = AlertUtil.showProgress(AddActivity.this, R.string.progress_loading);
+        new Thread() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
-                finish();
+            public void run() {
+                super.run();
+                NetworkManager.addMust(AddActivity.this, must);
+                progressDialog.dismiss();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertUtil.alert(AddActivity.this, R.string.alert_add_success, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+//                                AlertUtil.shareSNSAlert(AddActivity.this, shareMessage, true);
+                                finish();
+                            }
+                        });
+                    }
+                });
             }
-        });
+        }.start();
+    }
+
+    private void billing() {
+        if (isInitializeBilling) {
+            billingProcessor.purchase(this, inAppPurchaseItemArray[depositSelected]);
+        } else {
+            AlertUtil.alert(this, R.string.alert_not_initial_billing);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!billingProcessor.handleActivityResult(requestCode, resultCode, data))
+            super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onProductPurchased(final String productId, TransactionDetails details) {
+        Log.d(TAG, "onProductPurchased: productId : " + productId + ", details : " + details);
+        final Pay pay = new Pay();
+        pay.product_id = productId;
+        pay.order_id = details.purchaseInfo.purchaseData.orderId;
+        pay.token = details.purchaseInfo.purchaseData.purchaseToken;
+        pay.date = DateUtil.convertDateToString(AddActivity.this, details.purchaseInfo.purchaseData.purchaseTime);
+
+        PrefUtil.savePayData(this, pay);
+        PrefUtil.saveMustData(this, must);
+        final Must payMust = must;
+
+        // TODO : 단계별로 저장해서 처리하도록 해야함
+        final ProgressDialog progressDialog = AlertUtil.showProgress(AddActivity.this, R.string.progress_pay);
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                int code = NetworkManager.pay(AddActivity.this, pay, payMust);
+                if (code == 200) {
+                    PrefUtil.deletePayData(AddActivity.this);
+                    PrefUtil.deleteMustData(AddActivity.this);
+
+                    billingProcessor.consumePurchase(productId);
+                }
+                progressDialog.dismiss();
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        AlertUtil.alert(AddActivity.this, R.string.alert_add_success, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+//                                AlertUtil.shareSNSAlert(AddActivity.this, shareMessage, true);
+                                finish();
+                            }
+                        });
+                    }
+                });
+            }
+        }.start();
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+        Log.d(TAG, "onPurchaseHistoryRestored: ");
+    }
+
+    @Override
+    public void onBillingError(int errorCode, Throwable error) {
+        Log.d(TAG, "onBillingError: errorcode : " + errorCode + ", error : " + error);
+        AlertUtil.alert(this, R.string.alert_billing_failed);
+    }
+
+    @Override
+    public void onBillingInitialized() {
+        Log.d(TAG, "onBillingInitialized: ");
+        isInitializeBilling = true;
     }
 
     private class AddViewPagerAdapter extends PagerAdapter {
@@ -150,7 +258,6 @@ public class AddActivity extends AppCompatActivity {
             if (must == null) {
                 must = new Must();
             }
-
             must.title = addTitleEditText.getText().toString();
             must.start_date = startDay;
             must.end_date = endDay;
@@ -158,37 +265,57 @@ public class AddActivity extends AppCompatActivity {
 
             Log.d(TAG, "goPreview: must : " + must);
 
-            Must serverReceivedData = NetworkManager.previewMust(AddActivity.this, must);
-            if (serverReceivedData != null) {
-                must = serverReceivedData;
-                pageOffset += 1;
-                viewPager.setCurrentItem(pageOffset, true);
+            final ProgressDialog progressDialog = AlertUtil.showProgress(AddActivity.this, R.string.progress_loading);
+            new Thread() {
+                @Override
+                public void run() {
+                    super.run();
+                    final Must serverReceivedData = NetworkManager.previewMust(AddActivity.this, must);
+                    if (serverReceivedData != null) {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressDialog.dismiss();
+                                TextView nameTextView = (TextView) findViewById(R.id.preview_name);
+                                TextView startDayTextView = (TextView) findViewById(R.id.preview_start_day);
+                                TextView endDayTextView = (TextView) findViewById(R.id.preview_end_day);
+                                TextView daysTextView = (TextView) findViewById(R.id.preview_days);
+                                TextView depositTextView = (TextView) findViewById(R.id.preview_deposit);
+                                TextView defaultPointTextView = (TextView) findViewById(R.id.preview_default_point);
+                                must = serverReceivedData;
+                                pageOffset = 1;
+                                viewPager.setCurrentItem(pageOffset, true);
 
-                TextView nameTextView = (TextView) findViewById(R.id.preview_name);
-                TextView startDayTextView = (TextView) findViewById(R.id.preview_start_day);
-                TextView endDayTextView = (TextView) findViewById(R.id.preview_end_day);
-                TextView daysTextView = (TextView) findViewById(R.id.preview_days);
-                TextView depositTextView = (TextView) findViewById(R.id.preview_deposit);
-                TextView defaultPointTextView = (TextView) findViewById(R.id.preview_default_point);
+                                nameTextView.setText(addTitleEditText.getText().toString());
+                                startDayTextView.setText(DateUtil.convertDateToUTCDate(AddActivity.this, startDay));
+                                endDayTextView.setText(DateUtil.convertDateToUTCDate(AddActivity.this, endDay));
+                                String daysString = must.days + " " + getString(R.string.preview_days_unit);
+                                daysTextView.setText(daysString);
+                                depositTextView.setText(depositArray[depositSelected]);
 
-                nameTextView.setText(addTitleEditText.getText().toString());
-                startDayTextView.setText(startDay.split("T")[0]);
-                endDayTextView.setText(endDay.split("T")[0]);
-                String daysString = must.days + " " + getString(R.string.preview_days_unit);
-                daysTextView.setText(daysString);
-                depositTextView.setText(depositArray[depositSelected]);
+                                String pointString = "" + must.default_point;
+                                defaultPointTextView.setText(pointString);
 
-                String pointString = "" + must.default_point;
-                defaultPointTextView.setText(pointString);
-            }
+                            }
+                        });
+                    }
+                }
+            }.start();
         }
+
+        Date startDate = new Date();
 
         View.OnClickListener dayClickListener = new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                Date date = new Date();
+                if (view.getId() == R.id.add_start_day_picker_button) {
+                    startDate = new Date();
+                    endDay = null;
+                    endDayButton.setText(R.string.add_datepicker);
+                }
+
                 Calendar calendar = Calendar.getInstance();
-                calendar.setTime(date);
+                calendar.setTime(startDate);
 
                 DatePickerDialog dialog = new DatePickerDialog(AddActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
@@ -197,19 +324,30 @@ public class AddActivity extends AppCompatActivity {
                         switch (view.getId()) {
                             case R.id.add_start_day_picker_button:
                                 startDayButton.setText("" + year + "-" + (month + 1) + "-" + day);
-                                startDay = DateUtil.getStartDateStringWithYearAndMonthAndDay(year, month, day);
+                                startDay = DateUtil.getStartDateStringWithYearAndMonthAndDay(AddActivity.this, year, month, day);
+
+                                // Set min Date to start Date
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(startDate);
+                                calendar.set(Calendar.YEAR, year);
+                                calendar.set(Calendar.MONTH, month);
+                                calendar.set(Calendar.DAY_OF_MONTH, day);
+                                startDate.setTime(calendar.getTimeInMillis());
+
                                 break;
+
                             case R.id.add_end_day_picker_button:
                                 endDayButton.setText("" + year + "-" + (month + 1) + "-" + day);
-                                endDay = DateUtil.getEndDateStringWithYearAndMonthAndDay(year, month, day);
+                                endDay = DateUtil.getEndDateStringWithYearAndMonthAndDay(AddActivity.this, year, month, day);
                                 break;
+
                             default:
                                 Log.d(TAG, "onDateSet: Error!!");
                         }
                     }
                 }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-                dialog.getDatePicker().setMinDate(date.getTime());
-                calendar.add(Calendar.DAY_OF_MONTH, 90);
+                dialog.getDatePicker().setMinDate(startDate.getTime());
+                calendar.add(Calendar.DAY_OF_MONTH, 29);
                 dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
                 dialog.show();
             }
@@ -282,10 +420,14 @@ public class AddActivity extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
                             if (depositSelected == 0) {
-                                addMust();
+                                AlertUtil.alertWithCancel(AddActivity.this, R.string.alert_not_deposit, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        addMustAndFinish();
+                                    }
+                                });
                             } else {
-//                                BillingManager billingManager = new BillingManager(AddActivity.this);
-//                                billing();
+                                billing();
                             }
                         }
                     });

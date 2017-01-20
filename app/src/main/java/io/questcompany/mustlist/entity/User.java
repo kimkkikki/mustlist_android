@@ -8,7 +8,7 @@ public class User {
     public String id;
     public String key;
     public String email;
-    public String deviceId;
+    public String device_id;
     public Integer point;
 
     public User() {
@@ -25,7 +25,7 @@ public class User {
                 "id='" + id + '\'' +
                 ", key='" + key + '\'' +
                 ", email='" + email + '\'' +
-                ", deviceId='" + deviceId + '\'' +
+                ", device_id='" + device_id + '\'' +
                 ", point=" + point +
                 '}';
     }

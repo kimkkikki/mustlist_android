@@ -19,14 +19,15 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:text="@string/notice"/>
+            android:text="@string/score"/>
 
     </android.support.v7.widget.Toolbar>
 
-    <ExpandableListView
-        android:id="@+id/notice_expandable_list_view"
+    <android.support.v7.widget.ListViewCompat
+        android:id="@+id/score_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:groupIndicator="@null"/>
+        android:dividerHeight="1px"
+        android:divider="@color/colorGray" />
 
 </LinearLayout>

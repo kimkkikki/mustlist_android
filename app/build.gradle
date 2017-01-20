@@ -2,13 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     signingConfigs {
-        /* TODO(developer): Configure to sign app with a release key for testing.
         release {
-            storeFile file('path/to/release/signing/key')
-            keyAlias 'release_key_alias'
-            keyPassword "${password}"
-            storePassword "${password}"
-        }*/
+            storeFile file('release.jks')
+            keyAlias 'mustlist_release'
+            keyPassword "ejdrmsdl"
+            storePassword "23krq4"
+        }
     }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
@@ -16,8 +15,8 @@ android {
         applicationId "io.questcompany.mustlist"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -25,10 +24,9 @@ android {
             debuggable true
         }
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            // TODO(developer): uncomment below once config above is complete and uncommented.
-            // signingConfig signingConfigs.release
+            signingConfig signingConfigs.release
         }
     }
 }
@@ -39,12 +37,19 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:25.1.0'
+    compile 'com.android.support:support-v4:25.1.0'
     compile 'com.android.support:design:25.1.0'
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-auth:10.0.1'
+    compile 'com.google.firebase:firebase-messaging:10.0.1'
+    compile 'com.google.firebase:firebase-crash:10.0.1'
     compile 'com.google.android.gms:play-services-auth:10.0.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
     compile 'com.google.code.gson:gson:2.4'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    compile 'com.anjlab.android.iab.v3:library:1.0.+'
     testCompile 'junit:junit:4.12'
 }
 

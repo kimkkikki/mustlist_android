@@ -2,16 +2,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/side_point_change"
-            android:title="포인트 교환소" />
+            android:id="@+id/side_setting"
+            android:icon="@drawable/ic_settings_black_48dp"
+            android:title="@string/setting" />
         <item
-            android:id="@+id/side_history"
-            android:title="@string/history" />
+            android:id="@+id/side_score"
+            android:icon="@drawable/ic_credit_card_black_24dp"
+            android:title="@string/score" />
         <item
-            android:id="@+id/side_notice"
-            android:title="@string/notice" />
-        <item
-            android:id="@+id/side_faq"
-            android:title="@string/faq" />
+            android:id="@+id/side_use"
+            android:icon="@drawable/ic_shopping_basket_black_24dp"
+            android:title="@string/side_use" />
     </group>
 </menu>

@@ -1,9 +1,5 @@
 package io.questcompany.mustlist.util;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-
-import io.questcompany.mustlist.R;
 import io.questcompany.mustlist.entity.User;
 
 /**
@@ -15,7 +11,6 @@ public class Singleton {
     private static Singleton uniqueInstance = new Singleton();
 
     private User user;
-    private ProgressDialog progressDialog;
 
     private Singleton() {}
 
@@ -45,19 +40,5 @@ public class Singleton {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    public void loading(Context context) {
-        if (progressDialog == null) {
-            progressDialog = ProgressDialog.show(context, "", context.getString(R.string.sign_in_progress), true);
-        }
-    }
-
-    public void stopLoading() {
-        if (progressDialog != null) {
-            if (progressDialog.isShowing()) {
-                progressDialog.dismiss();
-            }
-        }
     }
 }

@@ -52,9 +52,11 @@
             android:id="@+id/swipe_layout">
 
             <android.support.v7.widget.ListViewCompat
-                android:id="@+id/main_listview"
+                android:id="@+id/main_list_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="wrap_content"
+                android:dividerHeight="1dp"
+                android:divider="@color/colorGray"/>
 
         </android.support.v4.widget.SwipeRefreshLayout>
 
