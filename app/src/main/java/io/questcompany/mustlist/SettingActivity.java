@@ -97,18 +97,22 @@ public class SettingActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+                        loadingDialog.show();
                         if (user != null) {
                             Log.d(TAG, "onClick: user : " + user.getProviderId());
                             user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     if (task.isSuccessful()) {
+                                        NetworkManager.deleteUser(SettingActivity.this);
                                         PrefUtil.clear(SettingActivity.this);
                                         closeActivitiesAndGoHome();
                                     } else {
                                         Toast.makeText(SettingActivity.this, "Leave Failed", Toast.LENGTH_SHORT).show();
                                         Log.d(TAG, "onComplete: error : " + task.getException());
                                     }
+
+                                    loadingDialog.dismiss();
                                 }
                             });
                         }
@@ -158,6 +162,9 @@ public class SettingActivity extends AppCompatActivity {
                     Log.d(TAG, "linkWithCredential: failure");
                     AlertUtil.alert(SettingActivity.this, R.string.alert_account_link_failure);
                 }
+
+                if (loadingDialog.isShowing())
+                    loadingDialog.dismiss();
             }
         });
     }
@@ -230,8 +237,6 @@ public class SettingActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if (NetworkManager.checkNetworkStatus(SettingActivity.this)) {
                             startWithGoogle();
-                            if (loadingDialog.isShowing())
-                                loadingDialog.dismiss();
                         } else {
                             AlertUtil.alert(SettingActivity.this, R.string.alert_not_connected_network);
                         }
@@ -244,8 +249,6 @@ public class SettingActivity extends AppCompatActivity {
                     public void onSuccess(LoginResult loginResult) {
                         Log.d(TAG, "Facebook Callback : Login Success");
                         handleFacebookAccessToken(loginResult.getAccessToken());
-                        if (loadingDialog.isShowing())
-                            loadingDialog.dismiss();
                     }
 
                     @Override

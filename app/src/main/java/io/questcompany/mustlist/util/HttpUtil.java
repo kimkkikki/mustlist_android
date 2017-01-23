@@ -21,7 +21,7 @@ import okhttp3.Response;
 
 public class HttpUtil extends AsyncTask<String, String, String> {
 
-    private static final String SERVER_URL = "http://questcompany.io/api";
+    private static final String SERVER_URL = "https://questcompany.io/api";
 //    private static final String SERVER_URL = "http://localhost:8000/api";
     private String requestUrl;
     private String body;
@@ -31,7 +31,7 @@ public class HttpUtil extends AsyncTask<String, String, String> {
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "HttpUtil";
 
-    public enum Method {POST, GET}
+    public enum Method {POST, GET, DELETE}
 
     public HttpUtil(String requestUrl, Method method, String body, Context context) {
         this.requestUrl = requestUrl;
@@ -67,6 +67,10 @@ public class HttpUtil extends AsyncTask<String, String, String> {
             if (method == Method.POST) {
                 RequestBody okBody = RequestBody.create(JSON, body);
                 builder.post(okBody);
+            }
+
+            if (method == Method.DELETE) {
+                builder.delete();
             }
 
             Request request = builder.build();

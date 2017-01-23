@@ -9,15 +9,12 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
 import io.questcompany.mustlist.entity.Must;
-import io.questcompany.mustlist.entity.Notice;
 import io.questcompany.mustlist.entity.Pay;
 import io.questcompany.mustlist.entity.Score;
 import io.questcompany.mustlist.entity.User;
-import io.questcompany.mustlist.util.DateUtil;
 import io.questcompany.mustlist.util.HttpUtil;
 import io.questcompany.mustlist.util.JsonResponse;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +71,15 @@ public class NetworkManager {
         return new Gson().fromJson(response.getJson(), User.class);
     }
 
+    public static User deleteUser(Context context) {
+        Log.d(TAG, "deleteUser: user : ");
+        JsonResponse response = sendToServer(context, "/user", HttpUtil.Method.DELETE, null);
+        if (response == null)
+            return null;
+
+        return new Gson().fromJson(response.getJson(), User.class);
+    }
+
     public static User getUser(Context context) {
         JsonResponse response = sendToServer(context, "/user", HttpUtil.Method.GET, null);
         if (response == null)
@@ -83,7 +89,11 @@ public class NetworkManager {
     }
 
     public static List<Must> getMustList(Context context) {
-        JsonResponse response = sendToServer(context, "/must", HttpUtil.Method.GET, null);
+        return getMustList(context, 0);
+    }
+
+    public static List<Must> getMustList(Context context, int page) {
+        JsonResponse response = sendToServer(context, "/must?page=" + page, HttpUtil.Method.GET, null);
         if (response == null) {
             return null;
         }
@@ -113,14 +123,14 @@ public class NetworkManager {
         return 400;
     }
 
-    public static List<Notice> getNotice(Context context) {
-        JsonResponse response = sendToServer(context, "/notice", HttpUtil.Method.GET, null);
-        if (response != null) {
-            return new Gson().fromJson(response.getJson(), new TypeToken<List<Notice>>(){}.getType());
-        } else {
-            return null;
-        }
-    }
+//    public static List<Notice> getNotice(Context context) {
+//        JsonResponse response = sendToServer(context, "/notice", HttpUtil.Method.GET, null);
+//        if (response != null) {
+//            return new Gson().fromJson(response.getJson(), new TypeToken<List<Notice>>(){}.getType());
+//        } else {
+//            return null;
+//        }
+//    }
 
     public static int pay(Context context, Pay pay, Must must) {
         Map<String, Object> dict =  new HashMap<>();

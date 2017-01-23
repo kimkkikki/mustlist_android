@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MustList(Will Generator)</string>
+    <string name="app_name">Mustlist(Will Generator)</string>
     <string name="welcome_first">Are your goals difficult to achieve?</string>
     <string name="welcome_second">Having trouble with lack of motivation and drive?</string>
     <string name="welcome_third">Bet your money on your to-do item, then get reward when you done it</string>
@@ -70,7 +70,7 @@
     <string name="side_guest">Welcome Guest</string>
     <string name="preview_guide_3">※ Refunds are available for 80% or more of the selected period.</string>
     <string name="main_list_progress">Progress</string>
-    <string name="alert_check_question">Did you do it?</string>
+    <string name="alert_check_question">Did you do it today?</string>
     <string name="alert_not_initial_billing">In-app Billing was not initiated. Please try again in a few minutes.</string>
     <string name="alert_billing_failed">Payment failed.</string>
     <string name="alert_not_deposit">If you do not pay, you may not be willing.</string>
@@ -90,4 +90,5 @@
     <string name="score_created">Created score</string>
     <string name="side_use">Use Score</string>
     <string name="use_not_yet">This feature is coming soon.</string>
+    <string name="main_title">Mustlist</string>
 </resources>

@@ -25,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -74,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     ProgressDialog loadingDialog;
     String[] depositArray;
+    private int page = 1;
 
     @Override
     public void onBackPressed() {
@@ -106,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 List<Must> serverReceivedData = NetworkManager.getMustList(MainActivity.this);
                 if (serverReceivedData != null) {
                     mustList = serverReceivedData;
+                    page = 1;
 
                     Pay pay = PrefUtil.getPayData(MainActivity.this);
                     Must must = PrefUtil.getMustData(MainActivity.this);
@@ -153,6 +156,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             loadingDialog.dismiss();
     }
 
+    private void moreDataLoad() {
+        loadingDialog.show();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                List<Must> moreList = NetworkManager.getMustList(MainActivity.this, page);
+                if (moreList != null && moreList.size() != 0) {
+                    page += 1;
+                    mustList.addAll(moreList);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            listViewAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
+                loadingDialog.dismiss();
+            }
+        }.start();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -191,9 +217,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mustList = new ArrayList<>();
 
         // List View
-        ListViewCompat listViewCompat = (ListViewCompat) findViewById(R.id.main_list_view);
+        final ListViewCompat listViewCompat = (ListViewCompat) findViewById(R.id.main_list_view);
         listViewAdapter = new ListViewAdapter();
         listViewCompat.setAdapter(listViewAdapter);
+
+        listViewCompat.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == SCROLL_STATE_IDLE) {
+                    int count = listViewCompat.getCount() - 1;
+                    if (listViewCompat.getLastVisiblePosition() >= count && count % 10 == 0) {
+                        Log.d(TAG, "onScrollStateChanged: last " + count);
+                        moreDataLoad();
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+            }
+        });
 
         listViewCompat.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
