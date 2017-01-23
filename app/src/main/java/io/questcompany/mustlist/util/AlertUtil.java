@@ -79,6 +79,14 @@ public class AlertUtil {
         alert.show();
     }
 
+    public static void alertWithCancel(Context context, int message, DialogInterface.OnClickListener okClickListener, DialogInterface.OnClickListener cancelClickListener) {
+        AlertDialog.Builder alert = new AlertDialog.Builder(context);
+        alert.setNegativeButton(R.string.cancel, cancelClickListener);
+        alert.setPositiveButton(R.string.alert_ok, okClickListener);
+        alert.setMessage(message);
+        alert.show();
+    }
+
     public static ProgressDialog showProgress(Context context, int message) {
         return ProgressDialog.show(context, "", context.getString(message), true);
     }

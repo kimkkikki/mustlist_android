@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mustlist(Will Generator)</string>
+    <string name="app_name">Will Generator(Mustlist)</string>
     <string name="welcome_first">Are your goals difficult to achieve?</string>
     <string name="welcome_second">Having trouble with lack of motivation and drive?</string>
     <string name="welcome_third">Bet your money on your to-do item, then get reward when you done it</string>
@@ -91,4 +91,5 @@
     <string name="side_use">Use Score</string>
     <string name="use_not_yet">This feature is coming soon.</string>
     <string name="main_title">Mustlist</string>
+    <string name="update_select">A new version is available. Do you want to update?</string>
 </resources>

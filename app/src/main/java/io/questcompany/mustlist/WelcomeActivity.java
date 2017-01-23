@@ -2,7 +2,9 @@ package io.questcompany.mustlist;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -52,6 +54,7 @@ public class WelcomeActivity extends AppCompatActivity {
     private static final int GOOGLE_SIGN_IN = 8765;
 
     private ProgressDialog loadingDialog;
+    private boolean firstTime = true;
 
     private void getUserInformation(final User requestUser) {
 
@@ -148,12 +151,7 @@ public class WelcomeActivity extends AppCompatActivity {
             loadingDialog.dismiss();
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.welcome_activity);
-
-        loadingDialog = AlertUtil.getLoadingDialog(this);
-
+    private void initializeUser() {
         if (PrefUtil.getUser(WelcomeActivity.this) != null) {
             if (!loadingDialog.isShowing())
                 loadingDialog.show();
@@ -162,6 +160,62 @@ public class WelcomeActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
+
+        firebaseAuth.addAuthStateListener(authStateListener);
+    }
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.welcome_activity);
+
+        loadingDialog = AlertUtil.getLoadingDialog(this);
+
+        loadingDialog.show();
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                final int code = NetworkManager.checkVersion(WelcomeActivity.this);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            switch (code) {
+                                case 200:
+                                    initializeUser();
+                                    break;
+                                case 205:
+                                case 206:
+                                    AlertUtil.alertWithCancel(WelcomeActivity.this, R.string.update_select,
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // OK
+                                                    final String appPackageName = getPackageName();
+                                                    try {
+                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                                                    } catch (android.content.ActivityNotFoundException e) {
+                                                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                                                    }
+                                                    firstTime = false;
+                                                }
+                                            },
+                                            new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    // Cancel
+                                                    initializeUser();
+                                                }
+                                            });
+                                    loadingDialog.dismiss();
+                                    break;
+                                default:
+                                    AlertUtil.alert(WelcomeActivity.this, R.string.alert_not_connect_server);
+                                    loadingDialog.dismiss();
+                            }
+                        }
+                    });
+            }
+        }.start();
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.welcome_view_pager);
         layouts = new int[]{
@@ -181,16 +235,20 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        firebaseAuth.addAuthStateListener(authStateListener);
+    protected void onResume() {
+        super.onResume();
+        if (!firstTime) {
+            initializeUser();
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         if (authStateListener != null) {
-            firebaseAuth.removeAuthStateListener(authStateListener);
+            if (firebaseAuth != null) {
+                firebaseAuth.removeAuthStateListener(authStateListener);
+            }
         }
     }
 

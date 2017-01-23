@@ -27,17 +27,19 @@ public class HttpUtil extends AsyncTask<String, String, String> {
     private String body;
     private Method method;
     private Context context;
+    private String version;
 
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final String TAG = "HttpUtil";
 
     public enum Method {POST, GET, DELETE}
 
-    public HttpUtil(String requestUrl, Method method, String body, Context context) {
+    public HttpUtil(String requestUrl, Method method, String body, Context context, String version) {
         this.requestUrl = requestUrl;
         this.method = method;
         this.body = body;
         this.context = context;
+        this.version = version;
     }
 
     @Override
@@ -57,6 +59,7 @@ public class HttpUtil extends AsyncTask<String, String, String> {
 
             // Setting Headers
             builder.addHeader("Content-Type", "application/json");
+            builder.addHeader("version", version);
             if (Singleton.getInstance().getId() != null && Singleton.getInstance().getKey() != null) {
                 builder.addHeader("id", Singleton.getInstance().getId());
                 builder.addHeader("key", Singleton.getInstance().getKey());

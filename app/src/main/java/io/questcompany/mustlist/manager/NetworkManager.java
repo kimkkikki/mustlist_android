@@ -1,6 +1,7 @@
 package io.questcompany.mustlist.manager;
 
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
@@ -44,7 +45,15 @@ public class NetworkManager {
             return null;
         }
 
-        HttpUtil httpUtil = new HttpUtil(endPoint, method, body, context);
+        int version;
+        try {
+            version = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            version = 0;
+        }
+
+        HttpUtil httpUtil = new HttpUtil(endPoint, method, body, context, "" + version);
 
         try {
             JsonResponse response = new Gson().fromJson(httpUtil.execute().get(), JsonResponse.class);
@@ -150,5 +159,14 @@ public class NetworkManager {
             return null;
         }
         return new Gson().fromJson(response.getJson(), new TypeToken<List<Score>>(){}.getType());
+    }
+
+    public static int checkVersion(Context context) {
+        JsonResponse response = sendToServer(context, "/version", HttpUtil.Method.GET, null);
+        if (response == null) {
+            return -1;
+        } else {
+            return response.getCode();
+        }
     }
 }

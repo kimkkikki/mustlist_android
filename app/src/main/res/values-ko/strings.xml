@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Mustlist(의지생성기)</string>
+    <string name="app_name">의지생성기(Mustlist)</string>
     <string name="welcome_first">목표를 달성하기 힘든가요?</string>
     <string name="welcome_second">할것은 있는데 의지가 안생기죠?</string>
     <string name="welcome_third">해야 하는 일에 만들고 싶은 의지만큼 돈을 걸고, 성공하여 돌려받으세요</string>
@@ -88,4 +88,5 @@
     <string name="side_use">점수 사용</string>
     <string name="use_not_yet">해당 기능은 준비중입니다</string>
     <string name="main_title">의지생성기</string>
+    <string name="update_select">새로운 버전이 나왔습니다. 업데이트 하시겠습니까?</string>
 </resources>
